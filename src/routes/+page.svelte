@@ -8,6 +8,7 @@
 	import GrindSizeSelector from '$lib/components/GrindSizeSelector.svelte';
 	import BrewGuide from '$lib/components/BrewGuide.svelte';
 	import ResultFooter from '$lib/components/ResultFooter.svelte';
+	import PageFooter from '$lib/components/PageFooter.svelte';
 	import type { State } from '$lib/types';
 	import { brewMethods, roastLevels, qualityLevels, grindSizes } from '$lib/brewLogic';
 	import {
@@ -147,6 +148,68 @@
 	});
 </script>
 
+<svelte:head>
+	<title>Coffee Ratio Calculator | Perfect Pour Over & Espresso Ratios</title>
+	<meta
+		name="description"
+		content="Calculate perfect coffee-to-water ratios for pour over, French press, espresso, and more. Get tailored recommendations based on roast level, grind size, and brew method."
+	/>
+	<link rel="canonical" href="https://coffee.chrisjmears.com/" />
+
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://coffee.chrisjmears.com/" />
+	<meta
+		property="og:title"
+		content="Coffee Ratio Calculator | Perfect Pour Over & Espresso Ratios"
+	/>
+	<meta
+		property="og:description"
+		content="Calculate perfect coffee-to-water ratios for pour over, French press, espresso, and more. Get tailored recommendations based on roast level, grind size, and brew method."
+	/>
+	<meta property="og:image" content="https://coffee.chrisjmears.com/og-image.png" />
+
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:url" content="https://coffee.chrisjmears.com/" />
+	<meta
+		name="twitter:title"
+		content="Coffee Ratio Calculator | Perfect Pour Over & Espresso Ratios"
+	/>
+	<meta
+		name="twitter:description"
+		content="Calculate perfect coffee-to-water ratios for pour over, French press, espresso, and more. Get tailored recommendations based on roast level, grind size, and brew method."
+	/>
+	<meta name="twitter:image" content="https://coffee.chrisjmears.com/og-image.png" />
+
+	{@html `
+		<script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@type": "WebApplication",
+			"name": "Coffee Ratio Calculator",
+			"description": "Calculate perfect coffee-to-water ratios for pour over, French press, espresso, and more. Get tailored recommendations based on roast level, grind size, and brew method.",
+			"url": "https://coffee.chrisjmears.com/",
+			"applicationCategory": "UtilitiesApplication",
+			"operatingSystem": "Any",
+			"offers": {
+				"@type": "Offer",
+				"price": "0",
+				"priceCurrency": "USD"
+			},
+			"author": {
+				"@type": "Person",
+				"name": "Chris J Mears",
+				"url": "https://www.chrisjmears.com/"
+			},
+			"creator": {
+				"@type": "Person",
+				"name": "Chris J Mears",
+				"url": "https://www.chrisjmears.com/"
+			}
+		}
+		</script>
+	`}
+</svelte:head>
+
 <div
 	class="flex min-h-screen flex-col bg-stone-50 font-sans text-stone-800 selection:bg-coffee-200"
 >
@@ -205,6 +268,8 @@
 			{baseRatio}
 			{recommendedGrind}
 		/>
+
+		<PageFooter />
 	</main>
 
 	<ResultFooter
