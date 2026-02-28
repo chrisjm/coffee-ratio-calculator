@@ -24,7 +24,8 @@
 		getResultSpoonVal,
 		getResultValue,
 		getInputConversion,
-		getResultConversion
+		getResultConversion,
+		getWaterVolumeInfo
 	} from '$lib/calculations';
 
 	const storageKey = 'coffee-ratio-state';
@@ -69,6 +70,7 @@
 	const resultValue = $derived(getResultValue(appState, ratio, _isEspressoMode));
 	const inputConversion = $derived(getInputConversion(appState, _isEspressoMode));
 	const resultConversion = $derived(getResultConversion(appState, ratio, _isEspressoMode));
+	const waterVolumeInfo = $derived(getWaterVolumeInfo(appState));
 
 	const resetApp = () => {
 		appState.mode = initialState.mode;
@@ -209,5 +211,6 @@
 		{resultUnit}
 		{resultSpoonVal}
 		{resultConversion}
+		{waterVolumeInfo}
 	/>
 </div>

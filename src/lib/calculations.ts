@@ -135,3 +135,9 @@ export function getResultConversion(state: State, ratio: number, isEspresso: boo
 	const beans = waterMl / ratio;
 	return `${gramsToOz(beans).toFixed(1)} oz`;
 }
+
+export function getWaterVolumeInfo(state: State): string | null {
+	if (state.mode !== 'water') return null;
+	const waterMl = cupsToMl(state.amount);
+	return `${Math.round(waterMl)} ml water`;
+}

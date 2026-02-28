@@ -1,16 +1,25 @@
 <script lang="ts">
-	import { Utensils, ArrowRightLeft } from '@lucide/svelte';
+	import { Utensils, ArrowRightLeft, Droplet } from '@lucide/svelte';
 
-	const { mode, ratio, resultLabel, resultValue, resultUnit, resultSpoonVal, resultConversion } =
-		$props<{
-			mode: 'beans' | 'water';
-			ratio: number;
-			resultLabel: string;
-			resultValue: string;
-			resultUnit: string;
-			resultSpoonVal: string;
-			resultConversion: string;
-		}>();
+	const {
+		mode,
+		ratio,
+		resultLabel,
+		resultValue,
+		resultUnit,
+		resultSpoonVal,
+		resultConversion,
+		waterVolumeInfo
+	} = $props<{
+		mode: 'beans' | 'water';
+		ratio: number;
+		resultLabel: string;
+		resultValue: string;
+		resultUnit: string;
+		resultSpoonVal: string;
+		resultConversion: string;
+		waterVolumeInfo: string | null;
+	}>();
 </script>
 
 <footer
@@ -32,7 +41,7 @@
 			</div>
 		</div>
 
-		<div class="mt-2 flex items-center gap-3">
+		<div class="mt-2 flex flex-wrap items-center gap-3">
 			<div class="flex items-center gap-1.5 text-stone-400">
 				<ArrowRightLeft class="h-3 w-3" />
 				<span class="text-xs font-bold">{resultConversion}</span>
@@ -42,6 +51,12 @@
 					<Utensils class="h-3 w-3" />
 					<span class="text-xs italic">{resultSpoonVal}</span>
 				</div>
+				{#if waterVolumeInfo}
+					<div class="flex items-center gap-1.5 text-stone-400">
+						<Droplet class="h-3 w-3" />
+						<span class="text-xs italic">{waterVolumeInfo}</span>
+					</div>
+				{/if}
 			{/if}
 		</div>
 	</div>
