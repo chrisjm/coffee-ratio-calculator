@@ -1,0 +1,44 @@
+{
+	"name": "Coffee Ratio Calculator",
+	"short_name": "Coffee Calc",
+	"description": "Calculate perfect coffee-to-water ratios for pour over, French press, espresso, and more. Get tailored recommendations based on roast level, grind size, and brew method.",
+	"start_url": "/",
+	"scope": "/",
+	"display": "standalone",
+	"background_color": "#fdf8f6",
+	"theme_color": "#78350f",
+	"orientation": "portrait-primary",
+	"icons": [
+		{
+			"src": "/icon-192.png",
+			"sizes": "192x192",
+			"type": "image/png",
+			"purpose": "any"
+		},
+		{
+			"src": "/icon-512.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "any"
+		},
+		{
+			"src": "/icon-maskable-512.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "maskable"
+		}
+	],
+	"categories": ["food", "utilities", "lifestyle"],
+	"shortcuts": [
+		{
+			"name": "Calculator",
+			"url": "/",
+			"description": "Open coffee ratio calculator"
+		},
+		{
+			"name": "FAQ",
+			"url": "/faq",
+			"description": "Learn the science"
+		}
+	]
+}

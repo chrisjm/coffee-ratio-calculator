@@ -28,16 +28,16 @@
 	<div class="flex rounded-lg bg-stone-200 p-1">
 		<button
 			class={mode === 'beans'
-				? 'flex-1 rounded-md bg-white py-2 text-sm font-medium text-stone-900 shadow-sm transition-all'
-				: 'flex-1 rounded-md py-2 text-sm font-medium text-stone-500 transition-all hover:text-stone-700'}
+				? 'flex-1 touch-manipulation rounded-md bg-white py-2 text-sm font-medium text-stone-900 shadow-sm transition-all'
+				: 'flex-1 touch-manipulation rounded-md py-2 text-sm font-medium text-stone-500 transition-all hover:text-stone-700'}
 			onclick={() => onModeChange('beans')}
 		>
 			I have Beans
 		</button>
 		<button
 			class={mode === 'water'
-				? 'flex-1 rounded-md bg-white py-2 text-sm font-medium text-stone-900 shadow-sm transition-all'
-				: 'flex-1 rounded-md py-2 text-sm font-medium text-stone-500 transition-all hover:text-stone-700'}
+				? 'flex-1 touch-manipulation rounded-md bg-white py-2 text-sm font-medium text-stone-900 shadow-sm transition-all'
+				: 'flex-1 touch-manipulation rounded-md py-2 text-sm font-medium text-stone-500 transition-all hover:text-stone-700'}
 			onclick={() => onModeChange('water')}
 		>
 			I want Coffee

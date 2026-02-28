@@ -17,7 +17,7 @@
 	<div class="grid grid-cols-3 gap-3" role="group" aria-labelledby="roast-level-label">
 		{#each roastLevels as level (level)}
 			<button
-				class={`roast-btn flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-transparent bg-white p-3 shadow-sm transition-all hover:shadow-md ${
+				class={`roast-btn flex touch-manipulation flex-col items-center justify-center gap-2 rounded-xl border-2 border-transparent bg-white p-3 shadow-sm transition-all hover:shadow-md ${
 					roast === level ? 'active' : ''
 				}`}
 				onclick={() => onRoastChange(level)}

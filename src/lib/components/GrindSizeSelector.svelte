@@ -48,7 +48,7 @@
 	<div class="grid grid-cols-3 gap-2">
 		{#each grindSizes as grind (grind)}
 			<button
-				class={`grind-btn rounded-lg border px-3 py-2 text-xs font-medium transition-all ${
+				class={`grind-btn touch-manipulation rounded-lg border px-3 py-2 text-xs font-medium transition-all ${
 					grindSize === grind
 						? 'border-coffee-700 bg-coffee-50 text-coffee-800'
 						: 'border-stone-200 bg-white text-stone-600 hover:border-stone-300'

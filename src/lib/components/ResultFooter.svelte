@@ -23,7 +23,7 @@
 </script>
 
 <footer
-	class="fixed bottom-0 z-50 w-full rounded-t-3xl bg-stone-900 text-white shadow-[0_-4px_20px_rgba(0,0,0,0.1)] transition-transform duration-300 ease-out"
+	class="safe-bottom fixed bottom-0 z-50 w-full rounded-t-3xl bg-stone-900 text-white shadow-[0_-4px_20px_rgba(0,0,0,0.1)] transition-transform duration-300 ease-out"
 >
 	<div class="mx-auto max-w-md px-6 py-5">
 		<div class="mb-1 flex items-end justify-between">

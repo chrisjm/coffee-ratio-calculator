@@ -189,7 +189,7 @@
 >
 	<HeaderBar onReset={resetApp} />
 
-	<main class="mx-auto w-full max-w-md flex-grow space-y-8 px-5 py-6 pb-32">
+	<main class="pb-safe-32 mx-auto w-full max-w-md flex-grow space-y-8 px-5 py-6">
 		<ModeInput
 			mode={appState.mode}
 			amount={appState.mode === 'beans' ? appState.beansAmount : appState.cupsAmount}

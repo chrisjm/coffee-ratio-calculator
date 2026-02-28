@@ -37,7 +37,7 @@
 			{@const config = methodConfig[method as BrewMethod]}
 			{@const IconComponent = config.icon}
 			<button
-				class={`brew-method-btn flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-transparent bg-white p-3 shadow-sm transition-all hover:shadow-md ${
+				class={`brew-method-btn flex touch-manipulation flex-col items-center justify-center gap-2 rounded-xl border-2 border-transparent bg-white p-3 shadow-sm transition-all hover:shadow-md ${
 					brewMethod === method ? 'active' : ''
 				}`}
 				onclick={() => onBrewMethodChange(method)}
