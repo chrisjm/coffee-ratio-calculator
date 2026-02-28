@@ -25,7 +25,8 @@
 		getResultValue,
 		getInputConversion,
 		getResultConversion,
-		getWaterVolumeInfo
+		getWaterVolumeInfo,
+		getAdjustedRatio
 	} from '$lib/calculations';
 
 	const storageKey = 'coffee-ratio-state';
@@ -53,7 +54,8 @@
 		return getSpoonWeight(appState);
 	});
 
-	const ratio = $derived(currentBrewMethodLogic.ratio);
+	const baseRatio = $derived(currentBrewMethodLogic.ratio);
+	const ratio = $derived(getAdjustedRatio(appState));
 	const recommendedGrind = $derived(currentBrewMethodLogic.grind);
 	const isGrindLocked = $derived(appState.brewMethod === 'preground-espresso');
 	const _isEspressoMode = $derived(isEspressoMode(appState));
@@ -200,6 +202,8 @@
 			grind={appState.grindSize}
 			brewTime={currentBrewMethodLogic.brewTime}
 			{ratio}
+			{baseRatio}
+			{recommendedGrind}
 		/>
 	</main>
 

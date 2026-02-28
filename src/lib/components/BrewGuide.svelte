@@ -1,11 +1,14 @@
 <script lang="ts">
 	import { Thermometer, Clock } from '@lucide/svelte';
+	import type { GrindSize } from '$lib/types';
 
-	const { temp, grind, brewTime, ratio } = $props<{
+	const { temp, grind, brewTime, ratio, baseRatio, recommendedGrind } = $props<{
 		temp: string;
 		grind: string;
 		brewTime: string;
 		ratio: number;
+		baseRatio?: number;
+		recommendedGrind?: GrindSize;
 	}>();
 
 	const grindLabels: Record<string, string> = {
@@ -18,6 +21,13 @@
 	};
 
 	const displayGrind = $derived(grindLabels[grind] || grind);
+	const isRatioAdjusted = $derived(
+		baseRatio !== undefined &&
+			recommendedGrind !== undefined &&
+			grind !== recommendedGrind &&
+			Math.abs(ratio - baseRatio) > 0.01
+	);
+	const ratioChange = $derived(isRatioAdjusted ? ratio - (baseRatio || 0) : 0);
 </script>
 
 <section class="rounded-2xl border border-stone-100 bg-white p-5 shadow-sm">
@@ -43,9 +53,16 @@
 		</div>
 		<div class="flex items-center justify-between">
 			<span class="text-sm text-stone-500">Target Ratio</span>
-			<span class="rounded bg-coffee-50 px-2 py-1 text-sm font-bold text-coffee-600">
-				1:{ratio}
-			</span>
+			<div class="flex flex-col items-end gap-1">
+				<span class="rounded bg-coffee-50 px-2 py-1 text-sm font-bold text-coffee-600">
+					1:{ratio.toFixed(1)}
+				</span>
+				{#if isRatioAdjusted}
+					<span class="text-xs text-stone-400">
+						{ratioChange > 0 ? '+' : ''}{ratioChange.toFixed(1)} for grind
+					</span>
+				{/if}
+			</div>
 		</div>
 	</div>
 </section>

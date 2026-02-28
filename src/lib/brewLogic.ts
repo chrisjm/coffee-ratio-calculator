@@ -2,11 +2,11 @@ import type { BrewMethod, GrindSize, RoastLevel, QualityLevel, RoastConfig } fro
 
 type BrewLogic = {
 	[K in BrewMethod]: K extends 'aeropress'
-		? {
-				immersion: Record<RoastLevel, RoastConfig>;
-				espresso: Record<RoastLevel, RoastConfig>;
-			}
-		: Record<RoastLevel, RoastConfig>;
+	? {
+		immersion: Record<RoastLevel, RoastConfig>;
+		espresso: Record<RoastLevel, RoastConfig>;
+	}
+	: Record<RoastLevel, RoastConfig>;
 };
 
 export const brewLogic: BrewLogic = {
@@ -406,3 +406,56 @@ export const grindSizes: readonly GrindSize[] = [
 	'medium-coarse',
 	'coarse'
 ];
+
+// Map grind sizes to numeric values for comparison
+const grindSizeOrder: Record<GrindSize, number> = {
+	'extra-fine': 0,
+	'fine': 1,
+	'medium-fine': 2,
+	'medium': 3,
+	'medium-coarse': 4,
+	'coarse': 5
+};
+
+/**
+ * Calculate ratio adjustment based on grind size deviation from recommended.
+ * Per RATIO_RESEARCH.md: finer grind = higher ratio, coarser grind = lower ratio
+ * 
+ * @param selectedGrind - The grind size selected by the user
+ * @param recommendedGrind - The recommended grind for the brew method/roast
+ * @param baseRatio - The base ratio before adjustment
+ * @param isEspresso - Whether this is espresso brewing (smaller adjustments)
+ * @returns Adjusted ratio
+ */
+export function getGrindAdjustedRatio(
+	selectedGrind: GrindSize,
+	recommendedGrind: GrindSize,
+	baseRatio: number,
+	isEspresso: boolean = false
+): number {
+	const selectedLevel = grindSizeOrder[selectedGrind];
+	const recommendedLevel = grindSizeOrder[recommendedGrind];
+	const deviation = selectedLevel - recommendedLevel;
+
+	if (deviation === 0) {
+		return baseRatio;
+	}
+
+	// Adjustment per grind step:
+	// - For filter brewing: ±0.5 ratio per step
+	// - For espresso: ±0.15 ratio per step (more sensitive)
+	const adjustmentPerStep = isEspresso ? 0.15 : 0.5;
+
+	// Finer grind (negative deviation) = higher ratio (more water)
+	// Coarser grind (positive deviation) = lower ratio (less water)
+	const adjustment = -deviation * adjustmentPerStep;
+
+	const adjustedRatio = baseRatio + adjustment;
+
+	// Ensure ratio stays within reasonable bounds
+	if (isEspresso) {
+		return Math.max(1.5, Math.min(3.5, adjustedRatio));
+	} else {
+		return Math.max(10, Math.min(20, adjustedRatio));
+	}
+}

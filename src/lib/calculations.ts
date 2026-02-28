@@ -1,5 +1,5 @@
 import type { State, BrewConfig } from './types';
-import { brewLogic } from './brewLogic';
+import { brewLogic, getGrindAdjustedRatio } from './brewLogic';
 import { cupsToMl, mlToCups, gramsToOz } from './utils/conversions';
 
 export function getCurrentBrewMethodLogic(state: State): BrewConfig {
@@ -140,4 +140,18 @@ export function getWaterVolumeInfo(state: State): string | null {
 	if (state.mode !== 'water') return null;
 	const waterMl = cupsToMl(state.amount);
 	return `${Math.round(waterMl)} ml water`;
+}
+
+/**
+ * Get the ratio adjusted for the selected grind size.
+ * This applies the grind adjustment logic from RATIO_RESEARCH.md
+ */
+export function getAdjustedRatio(state: State): number {
+	const brewConfig = getCurrentBrewMethodLogic(state);
+	const baseRatio = brewConfig.ratio;
+	const recommendedGrind = brewConfig.grind;
+	const selectedGrind = state.grindSize;
+	const isEspresso = isEspressoMode(state);
+
+	return getGrindAdjustedRatio(selectedGrind, recommendedGrind, baseRatio, isEspresso);
 }
