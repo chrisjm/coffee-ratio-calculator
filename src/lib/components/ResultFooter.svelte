@@ -1,14 +1,16 @@
 <script lang="ts">
-	import { Utensils } from '@lucide/svelte';
+	import { Utensils, ArrowRightLeft } from '@lucide/svelte';
 
-	const { mode, ratio, resultLabel, resultValue, resultUnit, resultSpoonVal } = $props<{
-		mode: 'beans' | 'water';
-		ratio: number;
-		resultLabel: string;
-		resultValue: string;
-		resultUnit: string;
-		resultSpoonVal: string;
-	}>();
+	const { mode, ratio, resultLabel, resultValue, resultUnit, resultSpoonVal, resultConversion } =
+		$props<{
+			mode: 'beans' | 'water';
+			ratio: number;
+			resultLabel: string;
+			resultValue: string;
+			resultUnit: string;
+			resultSpoonVal: string;
+			resultConversion: string;
+		}>();
 </script>
 
 <footer
@@ -30,11 +32,17 @@
 			</div>
 		</div>
 
-		{#if mode === 'water'}
-			<div class="mt-2 flex items-center gap-2 text-stone-400">
-				<Utensils class="h-3 w-3" />
-				<span class="text-xs italic">{resultSpoonVal}</span>
+		<div class="mt-2 flex items-center gap-3">
+			<div class="flex items-center gap-1.5 text-stone-400">
+				<ArrowRightLeft class="h-3 w-3" />
+				<span class="text-xs font-bold">{resultConversion}</span>
 			</div>
-		{/if}
+			{#if mode === 'water'}
+				<div class="flex items-center gap-1.5 text-stone-400">
+					<Utensils class="h-3 w-3" />
+					<span class="text-xs italic">{resultSpoonVal}</span>
+				</div>
+			{/if}
+		</div>
 	</div>
 </footer>

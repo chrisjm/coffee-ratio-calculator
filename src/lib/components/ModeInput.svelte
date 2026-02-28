@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Info, Utensils } from '@lucide/svelte';
+	import { Info, Utensils, ArrowRightLeft } from '@lucide/svelte';
 
 	const {
 		mode,
@@ -8,6 +8,7 @@
 		inputHint,
 		unitLabel,
 		inputSpoonVal,
+		inputConversion,
 		onModeChange,
 		onAmountChange
 	} = $props<{
@@ -17,6 +18,7 @@
 		inputHint: string;
 		unitLabel: string;
 		inputSpoonVal: string;
+		inputConversion: string;
 		onModeChange: (mode: 'beans' | 'water') => void;
 		onAmountChange: (amount: number) => void;
 	}>();
@@ -69,14 +71,18 @@
 			</span>
 		</div>
 
-		{#if mode === 'beans'}
-			<div
-				class="animate-fade-in mt-2 flex inline-flex items-center gap-2 rounded-lg bg-coffee-50 p-2 text-coffee-600"
-			>
-				<Utensils class="h-3 w-3" />
-				<span class="font-serif text-xs font-bold">{inputSpoonVal}</span>
+		<div class="mt-2 flex items-center justify-between gap-2">
+			{#if mode === 'beans'}
+				<div class="flex items-center gap-2 rounded-lg bg-coffee-50 px-2 py-1 text-coffee-600">
+					<Utensils class="h-3 w-3" />
+					<span class="font-serif text-xs font-bold">{inputSpoonVal}</span>
+				</div>
+			{/if}
+			<div class="flex items-center gap-1.5 rounded-lg bg-stone-100 px-2 py-1 text-stone-500">
+				<ArrowRightLeft class="h-3 w-3" />
+				<span class="font-serif text-xs font-bold">{inputConversion}</span>
 			</div>
-		{/if}
+		</div>
 
 		<p
 			class="mt-2 flex items-center gap-1 text-xs text-stone-400 opacity-0 transition-opacity group-hover:opacity-100"
