@@ -8,7 +8,9 @@
 	<div class="mx-auto flex max-w-md items-center justify-between px-6 py-4">
 		<div class="flex items-center gap-2">
 			<Coffee class="h-6 w-6 text-coffee-700" />
-			<h1 class="font-serif text-lg font-bold tracking-tight text-stone-900">Ratio Logic</h1>
+			<h1 class="font-serif text-lg font-bold tracking-tight text-stone-900">
+				Coffee Ratio Calculator
+			</h1>
 		</div>
 		<button
 			onclick={onReset}

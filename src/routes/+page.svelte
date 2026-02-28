@@ -167,18 +167,6 @@
 		content="Calculate perfect coffee-to-water ratios for pour over, French press, espresso, and more. Get tailored recommendations based on roast level, grind size, and brew method."
 	/>
 	<meta property="og:image" content="https://coffee.chrisjmears.com/og-image.png" />
-
-	<meta name="twitter:card" content="summary_large_image" />
-	<meta name="twitter:url" content="https://coffee.chrisjmears.com/" />
-	<meta
-		name="twitter:title"
-		content="Coffee Ratio Calculator | Perfect Pour Over & Espresso Ratios"
-	/>
-	<meta
-		name="twitter:description"
-		content="Calculate perfect coffee-to-water ratios for pour over, French press, espresso, and more. Get tailored recommendations based on roast level, grind size, and brew method."
-	/>
-	<meta name="twitter:image" content="https://coffee.chrisjmears.com/og-image.png" />
 </svelte:head>
 
 <div
