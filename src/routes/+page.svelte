@@ -34,12 +34,12 @@
 
 	const initialState: State = {
 		mode: 'beans',
-		amount: 2,
+		amount: 20,
 		brewMethod: 'pour-over',
 		aeropressMode: 'immersion',
-		roast: 'light',
+		roast: 'medium',
 		quality: 'high',
-		grindSize: 'medium-fine',
+		grindSize: 'medium',
 		grindOverride: false
 	};
 
