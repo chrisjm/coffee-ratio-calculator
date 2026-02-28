@@ -11,7 +11,7 @@
 
 <fieldset class="border-0 p-0">
 	<legend class="mb-3 block text-xs font-bold tracking-wider text-stone-400 uppercase">
-		Freshness &amp; Quality
+		Strength
 	</legend>
 	<div class="flex gap-3">
 		{#each qualityLevels as level (level)}
@@ -23,10 +23,10 @@
 			>
 				{#if level === 'high'}
 					<Sparkles class="h-4 w-4" />
-					<span>Specialty / Fresh</span>
+					<span>Light / Balanced</span>
 				{:else}
 					<ShoppingBag class="h-4 w-4" />
-					<span>Commodity / Old</span>
+					<span>Strong</span>
 				{/if}
 			</button>
 		{/each}
