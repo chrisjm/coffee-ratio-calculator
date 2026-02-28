@@ -148,8 +148,9 @@
 					</div>
 
 					<p class="mt-4 text-sm text-stone-500">
-						<strong>Sources:</strong> SCA Golden Cup Standards<sup>[2]</sup>, Adjusting Brewing
-						Recipe for Roast Level<sup>[8]</sup>
+						<strong>Sources:</strong>
+						<a href="#references" class="text-coffee-700 hover:underline"><sup>[2]</sup></a>,
+						<a href="#references" class="text-coffee-700 hover:underline"><sup>[8]</sup></a>
 					</p>
 				</div>
 
@@ -165,8 +166,9 @@
 						how quickly solubles can be extracted during brewing.
 					</p>
 					<p class="mt-4 text-sm text-stone-500">
-						<strong>Sources:</strong> Coffee Extraction Chart Chemistry<sup>[4]</sup>, Adjusting
-						Brewing Recipe for Roast Level<sup>[8]</sup>
+						<strong>Sources:</strong>
+						<a href="#references" class="text-coffee-700 hover:underline"><sup>[4]</sup></a>,
+						<a href="#references" class="text-coffee-700 hover:underline"><sup>[8]</sup></a>
 					</p>
 				</div>
 			</section>
@@ -207,7 +209,8 @@
 					</div>
 
 					<p class="mt-4 text-sm text-stone-500">
-						<strong>Sources:</strong> Understanding Coffee Bean Density<sup>[9]</sup>
+						<strong>Sources:</strong>
+						<a href="#references" class="text-coffee-700 hover:underline"><sup>[9]</sup></a>
 					</p>
 				</div>
 
@@ -240,9 +243,9 @@
 					</div>
 
 					<p class="mt-4 text-sm text-stone-500">
-						<strong>Sources:</strong> SCA Golden Cup Standards<sup>[2]</sup>, Coffee Defects Guide<sup
-							>[12]</sup
-						>
+						<strong>Sources:</strong>
+						<a href="#references" class="text-coffee-700 hover:underline"><sup>[2]</sup></a>,
+						<a href="#references" class="text-coffee-700 hover:underline"><sup>[12]</sup></a>
 					</p>
 				</div>
 
@@ -258,7 +261,8 @@
 						harsh, dry tannins.
 					</p>
 					<p class="mt-4 text-sm text-stone-500">
-						<strong>Sources:</strong> Adjusting Brewing Recipe for Roast Level<sup>[8]</sup>
+						<strong>Sources:</strong>
+						<a href="#references" class="text-coffee-700 hover:underline"><sup>[8]</sup></a>
 					</p>
 				</div>
 			</section>
@@ -321,8 +325,9 @@
 					</div>
 
 					<p class="mt-4 text-sm text-stone-500">
-						<strong>Sources:</strong> Mathematics of Coffee Extraction<sup>[1]</sup>, Decoding
-						Coffee Brewing Ratios<sup>[5]</sup>
+						<strong>Sources:</strong>
+						<a href="#references" class="text-coffee-700 hover:underline"><sup>[1]</sup></a>,
+						<a href="#references" class="text-coffee-700 hover:underline"><sup>[5]</sup></a>
 					</p>
 				</div>
 
@@ -339,7 +344,8 @@
 						strength.
 					</p>
 					<p class="mt-4 text-sm text-stone-500">
-						<strong>Sources:</strong> Mathematics of Coffee Extraction<sup>[1]</sup>
+						<strong>Sources:</strong>
+						<a href="#references" class="text-coffee-700 hover:underline"><sup>[1]</sup></a>
 					</p>
 				</div>
 			</section>
@@ -371,8 +377,8 @@
 						finer every few days.
 					</p>
 					<p class="mt-4 text-sm text-stone-500">
-						<strong>Sources:</strong> Why Grinder Settings Need to Change as Beans Age<sup>[10]</sup
-						>
+						<strong>Sources:</strong>
+						<a href="#references" class="text-coffee-700 hover:underline"><sup>[10]</sup></a>
 					</p>
 				</div>
 
@@ -407,8 +413,9 @@
 					</div>
 
 					<p class="mt-4 text-sm text-stone-500">
-						<strong>Sources:</strong> The Brewed Coffee Compass<sup>[7]</sup>, Scott Rao on Dose and
-						Brewing Ratio<sup>[6]</sup>
+						<strong>Sources:</strong>
+						<a href="#references" class="text-coffee-700 hover:underline"><sup>[7]</sup></a>,
+						<a href="#references" class="text-coffee-700 hover:underline"><sup>[6]</sup></a>
 					</p>
 				</div>
 
@@ -425,13 +432,15 @@
 						ignores the complex physics and chemistry of extraction.
 					</p>
 					<p class="mt-4 text-sm text-stone-500">
-						<strong>Sources:</strong> SCA Golden Cup Standards<sup>[2]</sup>, The Golden Ratio for
-						Brewing Coffee<sup>[3]</sup>, Common Coffee Control Chart<sup>[11]</sup>
+						<strong>Sources:</strong>
+						<a href="#references" class="text-coffee-700 hover:underline"><sup>[2]</sup></a>,
+						<a href="#references" class="text-coffee-700 hover:underline"><sup>[3]</sup></a>,
+						<a href="#references" class="text-coffee-700 hover:underline"><sup>[11]</sup></a>
 					</p>
 				</div>
 			</section>
 
-			<section class="mb-12">
+			<section id="references" class="mb-12">
 				<h2 class="mb-6">References</h2>
 				<ol class="space-y-2 text-sm text-stone-600">
 					<li>
