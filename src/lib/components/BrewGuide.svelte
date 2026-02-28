@@ -1,11 +1,23 @@
 <script lang="ts">
-	import { Thermometer } from '@lucide/svelte';
+	import { Thermometer, Clock } from '@lucide/svelte';
 
-	const { temp, grind, ratio } = $props<{
+	const { temp, grind, brewTime, ratio } = $props<{
 		temp: string;
 		grind: string;
+		brewTime: string;
 		ratio: number;
 	}>();
+
+	const grindLabels: Record<string, string> = {
+		'extra-fine': 'Extra Fine',
+		fine: 'Fine',
+		'medium-fine': 'Medium-Fine',
+		medium: 'Medium',
+		'medium-coarse': 'Medium-Coarse',
+		coarse: 'Coarse'
+	};
+
+	const displayGrind = $derived(grindLabels[grind] || grind);
 </script>
 
 <section class="rounded-2xl border border-stone-100 bg-white p-5 shadow-sm">
@@ -20,7 +32,14 @@
 		</div>
 		<div class="flex items-center justify-between border-b border-stone-50 pb-2">
 			<span class="text-sm text-stone-500">Grind Size</span>
-			<span class="text-sm font-bold text-stone-800">{grind}</span>
+			<span class="text-sm font-bold text-stone-800">{displayGrind}</span>
+		</div>
+		<div class="flex items-center justify-between border-b border-stone-50 pb-2">
+			<span class="flex items-center gap-1 text-sm text-stone-500">
+				<Clock class="h-3 w-3" />
+				Brew Time
+			</span>
+			<span class="text-sm font-bold text-stone-800">{brewTime}</span>
 		</div>
 		<div class="flex items-center justify-between">
 			<span class="text-sm text-stone-500">Target Ratio</span>
