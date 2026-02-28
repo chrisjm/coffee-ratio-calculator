@@ -66,31 +66,30 @@
 		quality: 'high' | 'low';
 	};
 
-	const initialState = {
-		mode: 'beans' as 'beans' | 'water',
+	const initialState: State = {
+		mode: 'beans',
 		amount: 20,
-		roast: 'light' as 'light' | 'medium' | 'dark',
-		quality: 'high' as 'high' | 'low'
+		roast: 'light',
+		quality: 'high'
 	};
 
-	// @ts-expect-error - Svelte 5 $state rune has type inference limitations with literal types
-	let state = $state(initialState);
+	let appState = $state(initialState);
 
 	let hydrated = $state(false);
 
-	// @ts-expect-error - state properties lose literal types through $state proxy
-	const currentLogic = $derived(logic[state.roast][state.quality]);
-	// @ts-expect-error - state properties lose literal types through $state proxy
-	const spoonWeight = $derived(logic[state.roast].spoonWeight);
+	const currentLogic = $derived(
+		logic[appState.roast as keyof typeof logic][appState.quality as 'high' | 'low']
+	);
+	const spoonWeight = $derived(logic[appState.roast as keyof typeof logic].spoonWeight);
 	const ratio = $derived(currentLogic.ratio);
 	const roastDesc = $derived(
-		state.roast === 'light'
+		appState.roast === 'light'
 			? 'Light roasts are dense; harder to extract.'
-			: state.roast === 'medium'
+			: appState.roast === 'medium'
 				? 'Medium roasts are balanced and soluble.'
 				: 'Dark roasts extract very easily; prone to bitterness.'
 	);
-	const isBeansMode = $derived(state.mode === 'beans');
+	const isBeansMode = $derived(appState.mode === 'beans');
 	const inputLabel = $derived(isBeansMode ? 'Beans Weight' : 'Water Volume');
 	const inputHint = $derived(
 		isBeansMode ? 'Enter amount of beans you have' : 'Enter amount of coffee you want'
@@ -98,37 +97,40 @@
 	const unitLabel = $derived(isBeansMode ? 'g' : 'ml');
 	const resultLabel = $derived(isBeansMode ? 'Water Needed' : 'Beans Needed');
 	const resultUnit = $derived(isBeansMode ? 'ml' : 'g');
-	const inputSpoonVal = $derived(`~ ${(state.amount / spoonWeight).toFixed(1)} heaping tbsp`);
+	const inputSpoonVal = $derived(`~ ${(appState.amount / spoonWeight).toFixed(1)} heaping tbsp`);
 	const resultSpoonVal = $derived.by(() => {
-		const beans = state.amount / ratio;
+		const beans = appState.amount / ratio;
 		return `~ ${(beans / spoonWeight).toFixed(1)} heaping tbsp`;
 	});
 	const resultValue = $derived.by(() => {
-		if (state.mode === 'beans') {
-			return Math.round(state.amount * ratio).toString();
+		if (appState.mode === 'beans') {
+			return Math.round(appState.amount * ratio).toString();
 		}
-		const beans = state.amount / ratio;
+		const beans = appState.amount / ratio;
 		return beans < 100 ? beans.toFixed(1) : Math.round(beans).toString();
 	});
 
 	const resetApp = () => {
-		Object.assign(state, initialState);
+		appState.mode = initialState.mode;
+		appState.amount = initialState.amount;
+		appState.roast = initialState.roast;
+		appState.quality = initialState.quality;
 	};
 
 	const handleModeChange = (mode: State['mode']) => {
-		state.mode = mode;
+		appState.mode = mode;
 	};
 
 	const handleAmountChange = (amount: number) => {
-		state.amount = amount;
+		appState.amount = amount;
 	};
 
 	const handleRoastChange = (roast: State['roast']) => {
-		state.roast = roast;
+		appState.roast = roast;
 	};
 
 	const handleQualityChange = (quality: State['quality']) => {
-		state.quality = quality;
+		appState.quality = quality;
 	};
 
 	onMount(() => {
@@ -136,10 +138,10 @@
 		if (saved) {
 			try {
 				const parsed = JSON.parse(saved) as Partial<State>;
-				if (parsed.mode) state.mode = parsed.mode;
-				if (typeof parsed.amount === 'number') state.amount = parsed.amount;
-				if (parsed.roast) state.roast = parsed.roast;
-				if (parsed.quality) state.quality = parsed.quality;
+				if (parsed.mode) appState.mode = parsed.mode;
+				if (typeof parsed.amount === 'number') appState.amount = parsed.amount;
+				if (parsed.roast) appState.roast = parsed.roast;
+				if (parsed.quality) appState.quality = parsed.quality;
 			} catch {
 				localStorage.removeItem(storageKey);
 			}
@@ -149,7 +151,7 @@
 
 	$effect(() => {
 		if (!hydrated) return;
-		localStorage.setItem(storageKey, JSON.stringify(state));
+		localStorage.setItem(storageKey, JSON.stringify(appState));
 	});
 </script>
 
@@ -160,8 +162,8 @@
 
 	<main class="mx-auto w-full max-w-md flex-grow space-y-8 px-5 py-6 pb-32">
 		<ModeInput
-			mode={state.mode}
-			amount={state.amount}
+			mode={appState.mode}
+			amount={appState.amount}
 			{inputLabel}
 			{inputHint}
 			{unitLabel}
@@ -173,14 +175,14 @@
 		<section class="space-y-6">
 			<RoastSelector
 				{roastLevels}
-				roast={state.roast}
+				roast={appState.roast}
 				{roastDesc}
 				onRoastChange={handleRoastChange}
 			/>
 
 			<QualitySelector
 				{qualityLevels}
-				quality={state.quality}
+				quality={appState.quality}
 				desc={currentLogic.desc}
 				onQualityChange={handleQualityChange}
 			/>
@@ -190,7 +192,7 @@
 	</main>
 
 	<ResultFooter
-		mode={state.mode}
+		mode={appState.mode}
 		{ratio}
 		{resultLabel}
 		{resultValue}
