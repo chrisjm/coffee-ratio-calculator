@@ -42,7 +42,7 @@ export const brewLogic: BrewLogic = {
 				temp: '90°C / 195°F',
 				grind: 'medium',
 				brewTime: '2:30-3:30',
-				desc: 'Stronger brew to emphasize chocolatey notes over clarity.'
+				desc: 'Tighter ratio adds body and masks defects with controlled extraction.'
 			}
 		},
 		dark: {
@@ -59,7 +59,7 @@ export const brewLogic: BrewLogic = {
 				temp: '80°C / 176°F',
 				grind: 'medium-coarse',
 				brewTime: '2:30-3:30',
-				desc: 'Very strong. Punchy. Ideal for adding milk or sugar.'
+				desc: 'Lower ratio and temp minimize bitterness. Good for milk drinks.'
 			}
 		}
 	},
@@ -78,7 +78,7 @@ export const brewLogic: BrewLogic = {
 				temp: '95°C / 203°F',
 				grind: 'coarse',
 				brewTime: '4:00',
-				desc: 'Fuller body with stronger concentration.'
+				desc: 'Tighter ratio adds body and masks potential defects.'
 			}
 		},
 		medium: {
@@ -95,7 +95,7 @@ export const brewLogic: BrewLogic = {
 				temp: '88°C / 190°F',
 				grind: 'medium-coarse',
 				brewTime: '4:00',
-				desc: 'Strong and bold. Perfect for morning coffee.'
+				desc: 'Lower ratio for fuller body. Masks defects with controlled extraction.'
 			}
 		},
 		dark: {
@@ -112,7 +112,7 @@ export const brewLogic: BrewLogic = {
 				temp: '80°C / 176°F',
 				grind: 'coarse',
 				brewTime: '4:00',
-				desc: 'Intense and concentrated. Great with milk.'
+				desc: 'Lower ratio and temp prevent over-extraction. Good with milk.'
 			}
 		}
 	},
@@ -132,7 +132,7 @@ export const brewLogic: BrewLogic = {
 					temp: '93°C / 199°F',
 					grind: 'medium-fine',
 					brewTime: '1:30-2:00',
-					desc: 'Concentrated and smooth with good body.'
+					desc: 'Tighter ratio for fuller body and smoother profile.'
 				}
 			},
 			medium: {
@@ -149,7 +149,7 @@ export const brewLogic: BrewLogic = {
 					temp: '87°C / 189°F',
 					grind: 'medium',
 					brewTime: '1:30-2:00',
-					desc: 'Rich and full-bodied AeroPress brew.'
+					desc: 'Lower ratio for fuller body. Controlled extraction masks defects.'
 				}
 			},
 			dark: {
@@ -166,7 +166,7 @@ export const brewLogic: BrewLogic = {
 					temp: '78°C / 172°F',
 					grind: 'medium',
 					brewTime: '1:30-2:00',
-					desc: 'Strong concentrate perfect for dilution or milk drinks.'
+					desc: 'Concentrated brew. Lower temp prevents bitterness. Good for milk.'
 				}
 			}
 		},
@@ -185,7 +185,7 @@ export const brewLogic: BrewLogic = {
 					temp: '93°C / 199°F',
 					grind: 'fine',
 					brewTime: '30-45s',
-					desc: 'Concentrated espresso-style shot with good clarity.'
+					desc: 'Concentrated espresso-style shot with good body.'
 				}
 			},
 			medium: {
@@ -202,7 +202,7 @@ export const brewLogic: BrewLogic = {
 					temp: '87°C / 189°F',
 					grind: 'fine',
 					brewTime: '30-45s',
-					desc: 'Ristretto-style shot. Intense and syrupy.'
+					desc: 'Ristretto-style shot with controlled extraction.'
 				}
 			},
 			dark: {
@@ -219,7 +219,7 @@ export const brewLogic: BrewLogic = {
 					temp: '78°C / 172°F',
 					grind: 'fine',
 					brewTime: '30-45s',
-					desc: 'Ultra-concentrated shot. Perfect for milk-based drinks.'
+					desc: 'Ultra-concentrated. Lower temp prevents bitterness. Good for milk.'
 				}
 			}
 		}
@@ -239,7 +239,7 @@ export const brewLogic: BrewLogic = {
 				temp: '93°C / 199°F',
 				grind: 'extra-fine',
 				brewTime: '25-30s',
-				desc: 'Extended extraction for dense light roast beans.'
+				desc: 'Tighter ratio for fuller body with dense light roast beans.'
 			}
 		},
 		medium: {
@@ -256,7 +256,7 @@ export const brewLogic: BrewLogic = {
 				temp: '87°C / 189°F',
 				grind: 'extra-fine',
 				brewTime: '25-30s',
-				desc: 'Ristretto ratio for concentrated sweetness.'
+				desc: 'Ristretto ratio with controlled extraction for body.'
 			}
 		},
 		dark: {
@@ -273,7 +273,7 @@ export const brewLogic: BrewLogic = {
 				temp: '78°C / 172°F',
 				grind: 'extra-fine',
 				brewTime: '25-30s',
-				desc: 'Ultra-short pull. Thick and syrupy body.'
+				desc: 'Ultra-short pull. Lower temp prevents bitterness. Good for milk.'
 			}
 		}
 	},
@@ -309,7 +309,7 @@ export const brewLogic: BrewLogic = {
 				temp: '88°C / 190°F',
 				grind: 'extra-fine',
 				brewTime: '5:00-7:00',
-				desc: 'Stronger brew to mask any over-extraction from fine grind.'
+				desc: 'Tighter ratio adds body and masks any over-extraction from fine grind.'
 			}
 		},
 		dark: {
@@ -326,7 +326,7 @@ export const brewLogic: BrewLogic = {
 				temp: '78°C / 172°F',
 				grind: 'extra-fine',
 				brewTime: '5:00-7:00',
-				desc: 'Camping survival mode. Strong and serviceable.'
+				desc: 'Lower ratio and temp for fuller body. Camping-friendly.'
 			}
 		}
 	},
@@ -362,7 +362,7 @@ export const brewLogic: BrewLogic = {
 				temp: '88°C / 190°F',
 				grind: 'medium',
 				brewTime: '4:00-5:00',
-				desc: 'Strong cowboy coffee. Works with any grind size.'
+				desc: 'Tighter ratio for fuller body. Works with any grind size.'
 			}
 		},
 		dark: {
@@ -379,7 +379,7 @@ export const brewLogic: BrewLogic = {
 				temp: '78°C / 172°F',
 				grind: 'coarse',
 				brewTime: '4:00-5:00',
-				desc: 'Bold camping brew. Make do with what you have.'
+				desc: 'Lower ratio for fuller body. Make do with what you have.'
 			}
 		}
 	}
