@@ -1,42 +1,60 @@
-# sv
+# Coffee Ratio Calculator
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+A focused SvelteKit app for dialing in pour-over coffee. Enter either beans or water, pick roast level and cup quality, and get a tailored ratio plus temperature/grind guidance. The app remembers your last settings in local storage so you can keep tweaking between brews.
 
-## Creating a project
+## Features
 
-If you're seeing this, you've probably already done this step. Congrats!
+- **Two modes**: calculate water from beans or beans from water.
+- **Roast-aware ratios**: light, medium, and dark recommendations.
+- **Quality toggle**: high-clarity vs. lower-ratio, fuller body.
+- **Brew guidance**: suggested temperature and grind size per recipe.
+- **Kitchen-friendly hints**: approximate heaping tablespoon conversions.
 
-```sh
-# create a new project
-npx sv create my-app
-```
+## Tech Stack
 
-To recreate this project with the same configuration:
+- SvelteKit + Svelte 5
+- Tailwind CSS (with typography + forms plugins)
+- Netlify adapter for deployment
 
-```sh
-# recreate this project
-pnpm dlx sv create --template minimal --types ts --add prettier eslint tailwindcss="plugins:typography,forms" sveltekit-adapter="adapter:netlify" --install pnpm .
-```
+## Getting Started
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Install dependencies:
 
 ```sh
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+pnpm install
 ```
 
-## Building
-
-To create a production version of your app:
+Run the dev server:
 
 ```sh
-npm run build
+pnpm run dev
 ```
 
-You can preview the production build with `npm run preview`.
+Preview the production build:
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+```sh
+pnpm run build
+pnpm run preview
+```
+
+## Scripts
+
+- `pnpm run dev` — start the dev server
+- `pnpm run build` — build for production
+- `pnpm run preview` — preview the production build
+- `pnpm run lint` — run ESLint + Prettier
+- `pnpm run check` — run Svelte type checks
+- `pnpm run test:ci` — run lint + check + build
+
+## Deployment
+
+This project uses `@sveltejs/adapter-netlify`. Build and deploy to Netlify as a standard SvelteKit app.
+
+## Project Structure
+
+- `src/routes/+page.svelte` — main calculator page and logic
+- `src/lib/components` — UI components for inputs, selectors, and result display
+
+## License
+
+MIT
