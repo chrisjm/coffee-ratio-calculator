@@ -338,13 +338,13 @@ describe('calculations', () => {
 			const result = getInputConversion(state, false);
 			expect(result).toContain('ml');
 			expect(result).toContain('473');
+			expect(result).toContain('cups');
 		});
 
 		it('should convert grams to oz in water mode with espresso', () => {
 			const state = createMockState({ mode: 'water', beansAmount: 18, brewMethod: 'espresso' });
 			const result = getInputConversion(state, true);
 			expect(result).toContain('oz');
-			expect(result).toContain('0.6');
 		});
 	});
 

@@ -122,7 +122,8 @@ export function getInputConversion(state: State, isEspresso: boolean): string {
 	if (isEspresso) {
 		return `${gramsToOz(state.beansAmount).toFixed(1)} oz`;
 	}
-	return `${Math.round(cupsToMl(state.cupsAmount))} ml`;
+	const waterMl = cupsToMl(state.cupsAmount);
+	return `${Math.round(waterMl)} ml (~${mlToCups(waterMl).toFixed(1)} cups)`;
 }
 
 export function getResultConversion(state: State, ratio: number, isEspresso: boolean): string {
