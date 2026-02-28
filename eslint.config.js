@@ -37,7 +37,8 @@ export default defineConfig(
 		},
 		rules: {
 			'no-use-before-define': 'off',
-			'@typescript-eslint/no-use-before-define': 'off'
+			'@typescript-eslint/no-use-before-define': 'off',
+			'svelte/no-navigation-without-resolve': 'off'
 		}
 	}
 );

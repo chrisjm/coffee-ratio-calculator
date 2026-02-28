@@ -15,6 +15,7 @@
 		<div class="flex items-center gap-4">
 			<a
 				href="/faq"
+				data-sveltekit-preload-data
 				class="text-xs font-medium tracking-wider text-stone-400 uppercase transition-colors hover:text-coffee-700"
 			>
 				FAQ

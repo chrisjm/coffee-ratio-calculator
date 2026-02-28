@@ -4,7 +4,11 @@
 
 <footer class="mt-12 pb-4 text-center text-sm text-stone-400">
 	<div class="space-y-2">
-		<a href="/faq" class="inline-flex items-center gap-1.5 transition-colors hover:text-coffee-700">
+		<a
+			href="/faq"
+			data-sveltekit-preload-data
+			class="inline-flex items-center gap-1.5 transition-colors hover:text-coffee-700"
+		>
 			<BookOpen class="h-4 w-4" />
 			<span>Learn the Science</span>
 		</a>

@@ -68,6 +68,7 @@
 	<div class="mt-4 border-t border-stone-100 pt-4">
 		<a
 			href="/faq"
+			data-sveltekit-preload-data
 			class="flex items-center justify-center gap-1 text-xs text-stone-400 transition-colors hover:text-coffee-700"
 		>
 			<span>Why these recommendations?</span>

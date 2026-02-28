@@ -1,5 +1,47 @@
 <script lang="ts">
 	import { Coffee, BookOpen, Beaker } from '@lucide/svelte';
+
+	const jsonLdSchema = {
+		'@context': 'https://schema.org',
+		'@type': 'FAQPage',
+		mainEntity: [
+			{
+				'@type': 'Question',
+				name: 'Why do different roast levels need different coffee-to-water ratios?',
+				acceptedAnswer: {
+					'@type': 'Answer',
+					text: 'Roasting physically degrades the cellular matrix of the bean, altering its density and solubility. Light roasts have high density and low porosity, requiring higher ratios (1:16-1:18) and finer grinds. Dark roasts are extremely porous and highly soluble, requiring tighter ratios (1:14-1:15) and coarser grinds to prevent over-extraction of bitter compounds.'
+				}
+			},
+			{
+				'@type': 'Question',
+				name: 'How does coffee bean altitude affect brewing?',
+				acceptedAnswer: {
+					'@type': 'Answer',
+					text: 'High-altitude coffees (>1,500m) develop dense, tightly packed cell walls that resist water penetration, requiring higher ratios (1:16-1:18) and finer grinds. Low-altitude coffees (<1,000m) have loose, porous structures that extract quickly, requiring lower ratios (1:14-1:15) and coarser grinds to prevent over-extraction.'
+				}
+			},
+			{
+				'@type': 'Question',
+				name: 'Why does espresso use such different ratios than pour over?',
+				acceptedAnswer: {
+					'@type': 'Answer',
+					text: 'Espresso forces water through compacted coffee at 9 bar of pressure, creating massive extraction in very short contact time. This allows hyper-efficient ratios of 1:1.5 to 1:3.0. Pour over uses gravity-driven percolation with longer contact time, requiring ratios of 1:15 to 1:18 to achieve proper extraction.'
+				}
+			},
+			{
+				'@type': 'Question',
+				name: 'How should I adjust my grind as coffee beans age?',
+				acceptedAnswer: {
+					'@type': 'Answer',
+					text: 'Freshly roasted coffee off-gasses CO2, creating physical resistance against brewing water. As beans age and lose CO2, hydraulic resistance drops. You must grind progressively finer over time to artificially recreate that resistance and maintain consistent flow rates and extraction.'
+				}
+			}
+		]
+	};
+
+	const jsonLdHtml =
+		'<script type="application/ld+json">' + JSON.stringify(jsonLdSchema) + '<' + '/script>';
 </script>
 
 <svelte:head>
@@ -19,46 +61,8 @@
 	/>
 	<meta property="og:image" content="https://coffee.chrisjmears.com/og-image.png" />
 
-	{@html `<script type="application/ld+json">
-	{
-		"@context": "https://schema.org",
-		"@type": "FAQPage",
-		"mainEntity": [
-			{
-				"@type": "Question",
-				"name": "Why do different roast levels need different coffee-to-water ratios?",
-				"acceptedAnswer": {
-					"@type": "Answer",
-					"text": "Roasting physically degrades the cellular matrix of the bean, altering its density and solubility. Light roasts have high density and low porosity, requiring higher ratios (1:16-1:18) and finer grinds. Dark roasts are extremely porous and highly soluble, requiring tighter ratios (1:14-1:15) and coarser grinds to prevent over-extraction of bitter compounds."
-				}
-			},
-			{
-				"@type": "Question",
-				"name": "How does coffee bean altitude affect brewing?",
-				"acceptedAnswer": {
-					"@type": "Answer",
-					"text": "High-altitude coffees (>1,500m) develop dense, tightly packed cell walls that resist water penetration, requiring higher ratios (1:16-1:18) and finer grinds. Low-altitude coffees (<1,000m) have loose, porous structures that extract quickly, requiring lower ratios (1:14-1:15) and coarser grinds to prevent over-extraction."
-				}
-			},
-			{
-				"@type": "Question",
-				"name": "Why does espresso use such different ratios than pour over?",
-				"acceptedAnswer": {
-					"@type": "Answer",
-					"text": "Espresso forces water through compacted coffee at 9 bar of pressure, creating massive extraction in very short contact time. This allows hyper-efficient ratios of 1:1.5 to 1:3.0. Pour over uses gravity-driven percolation with longer contact time, requiring ratios of 1:15 to 1:18 to achieve proper extraction."
-				}
-			},
-			{
-				"@type": "Question",
-				"name": "How should I adjust my grind as coffee beans age?",
-				"acceptedAnswer": {
-					"@type": "Answer",
-					"text": "Freshly roasted coffee off-gasses CO2, creating physical resistance against brewing water. As beans age and lose CO2, hydraulic resistance drops. You must grind progressively finer over time to artificially recreate that resistance and maintain consistent flow rates and extraction."
-				}
-			}
-		]
-	}
-	<\/script>`}
+	<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+	{@html jsonLdHtml}
 </svelte:head>
 
 <div class="min-h-screen bg-gradient-to-b from-stone-50 to-white">
@@ -66,6 +70,7 @@
 		<div class="mx-auto max-w-3xl px-6 py-6">
 			<a
 				href="/"
+				data-sveltekit-preload-data
 				class="inline-flex items-center gap-2 text-coffee-700 transition-colors hover:text-coffee-800"
 			>
 				<Coffee class="h-5 w-5" />
@@ -559,6 +564,7 @@
 				</p>
 				<a
 					href="/"
+					data-sveltekit-preload-data
 					class="inline-flex items-center gap-2 rounded-lg bg-coffee-700 px-6 py-3 font-medium text-white transition-colors hover:bg-coffee-800"
 				>
 					<Coffee class="h-5 w-5" />
