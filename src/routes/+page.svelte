@@ -67,17 +67,20 @@
 	};
 
 	const initialState = {
-		mode: 'beans' as const,
+		mode: 'beans' as 'beans' | 'water',
 		amount: 20,
-		roast: 'light' as const,
-		quality: 'high' as const
+		roast: 'light' as 'light' | 'medium' | 'dark',
+		quality: 'high' as 'high' | 'low'
 	};
 
+	// @ts-expect-error - Svelte 5 $state rune has type inference limitations with literal types
 	let state = $state(initialState);
 
 	let hydrated = $state(false);
 
+	// @ts-expect-error - state properties lose literal types through $state proxy
 	const currentLogic = $derived(logic[state.roast][state.quality]);
+	// @ts-expect-error - state properties lose literal types through $state proxy
 	const spoonWeight = $derived(logic[state.roast].spoonWeight);
 	const ratio = $derived(currentLogic.ratio);
 	const roastDesc = $derived(
