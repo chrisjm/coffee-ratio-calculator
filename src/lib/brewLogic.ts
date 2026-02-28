@@ -2,11 +2,11 @@ import type { BrewMethod, GrindSize, RoastLevel, QualityLevel, RoastConfig } fro
 
 type BrewLogic = {
 	[K in BrewMethod]: K extends 'aeropress'
-	? {
-		immersion: Record<RoastLevel, RoastConfig>;
-		espresso: Record<RoastLevel, RoastConfig>;
-	}
-	: Record<RoastLevel, RoastConfig>;
+		? {
+				immersion: Record<RoastLevel, RoastConfig>;
+				espresso: Record<RoastLevel, RoastConfig>;
+			}
+		: Record<RoastLevel, RoastConfig>;
 };
 
 export const brewLogic: BrewLogic = {
@@ -410,17 +410,17 @@ export const grindSizes: readonly GrindSize[] = [
 // Map grind sizes to numeric values for comparison
 const grindSizeOrder: Record<GrindSize, number> = {
 	'extra-fine': 0,
-	'fine': 1,
+	fine: 1,
 	'medium-fine': 2,
-	'medium': 3,
+	medium: 3,
 	'medium-coarse': 4,
-	'coarse': 5
+	coarse: 5
 };
 
 /**
  * Calculate ratio adjustment based on grind size deviation from recommended.
  * Per RATIO_RESEARCH.md: finer grind = higher ratio, coarser grind = lower ratio
- * 
+ *
  * @param selectedGrind - The grind size selected by the user
  * @param recommendedGrind - The recommended grind for the brew method/roast
  * @param baseRatio - The base ratio before adjustment

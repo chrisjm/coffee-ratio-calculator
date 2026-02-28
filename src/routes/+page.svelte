@@ -179,35 +179,6 @@
 		content="Calculate perfect coffee-to-water ratios for pour over, French press, espresso, and more. Get tailored recommendations based on roast level, grind size, and brew method."
 	/>
 	<meta name="twitter:image" content="https://coffee.chrisjmears.com/og-image.png" />
-
-	{@html `
-		<script type="application/ld+json">
-		{
-			"@context": "https://schema.org",
-			"@type": "WebApplication",
-			"name": "Coffee Ratio Calculator",
-			"description": "Calculate perfect coffee-to-water ratios for pour over, French press, espresso, and more. Get tailored recommendations based on roast level, grind size, and brew method.",
-			"url": "https://coffee.chrisjmears.com/",
-			"applicationCategory": "UtilitiesApplication",
-			"operatingSystem": "Any",
-			"offers": {
-				"@type": "Offer",
-				"price": "0",
-				"priceCurrency": "USD"
-			},
-			"author": {
-				"@type": "Person",
-				"name": "Chris J Mears",
-				"url": "https://www.chrisjmears.com/"
-			},
-			"creator": {
-				"@type": "Person",
-				"name": "Chris J Mears",
-				"url": "https://www.chrisjmears.com/"
-			}
-		}
-		</script>
-	`}
 </svelte:head>
 
 <div
