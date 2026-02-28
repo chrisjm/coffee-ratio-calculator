@@ -1,12 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import {
-	ozToMl,
-	mlToOz,
-	cupsToMl,
-	mlToCups,
-	gramsToOz,
-	ozToGrams
-} from './conversions';
+import { ozToMl, mlToOz, cupsToMl, mlToCups, gramsToOz, ozToGrams } from './conversions';
 
 describe('conversions', () => {
 	describe('ozToMl', () => {

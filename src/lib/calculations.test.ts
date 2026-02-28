@@ -294,10 +294,16 @@ describe('calculations', () => {
 			expect(result).toBe('45');
 		});
 
-		it('should calculate beans needed in water mode', () => {
+		it('should calculate beans needed in water mode with small amount', () => {
 			const state = createMockState({ mode: 'water', cupsAmount: 2 });
 			const result = getResultValue(state, 16, false);
 			expect(result).toContain('.');
+		});
+
+		it('should calculate beans needed in water mode with large amount', () => {
+			const state = createMockState({ mode: 'water', cupsAmount: 10 });
+			const result = getResultValue(state, 16, false);
+			expect(result).toBe('148');
 		});
 
 		it('should handle large values without decimals', () => {

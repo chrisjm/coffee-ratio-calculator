@@ -7,7 +7,6 @@ import {
 	grindSizes,
 	getGrindAdjustedRatio
 } from './brewLogic';
-import type { BrewMethod, RoastLevel, QualityLevel, GrindSize } from './types';
 
 describe('brewLogic', () => {
 	describe('brewLogic data structure', () => {
