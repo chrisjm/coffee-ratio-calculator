@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ShoppingBag, Sparkles } from '@lucide/svelte';
+	import { Award, Coffee } from '@lucide/svelte';
 
 	const { qualityLevels, quality, desc, onQualityChange } = $props<{
 		qualityLevels: readonly ('high' | 'low')[];
@@ -11,7 +11,7 @@
 
 <fieldset class="border-0 p-0">
 	<legend class="mb-3 block text-xs font-bold tracking-wider text-stone-400 uppercase">
-		Strength
+		Coffee Quality
 	</legend>
 	<div class="flex gap-3">
 		{#each qualityLevels as level (level)}
@@ -22,11 +22,11 @@
 				onclick={() => onQualityChange(level)}
 			>
 				{#if level === 'high'}
-					<Sparkles class="h-4 w-4" />
-					<span>Light / Balanced</span>
+					<Award class="h-4 w-4" />
+					<span>Specialty</span>
 				{:else}
-					<ShoppingBag class="h-4 w-4" />
-					<span>Strong</span>
+					<Coffee class="h-4 w-4" />
+					<span>Commodity</span>
 				{/if}
 			</button>
 		{/each}
