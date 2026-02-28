@@ -65,4 +65,13 @@
 			</div>
 		</div>
 	</div>
+	<div class="mt-4 border-t border-stone-100 pt-4">
+		<a
+			href="/faq"
+			class="flex items-center justify-center gap-1 text-xs text-stone-400 transition-colors hover:text-coffee-700"
+		>
+			<span>Why these recommendations?</span>
+			<span class="text-coffee-600">→</span>
+		</a>
+	</div>
 </section>

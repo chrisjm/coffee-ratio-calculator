@@ -12,11 +12,19 @@
 				Coffee Ratio Calculator
 			</h1>
 		</div>
-		<button
-			onclick={onReset}
-			class="text-xs font-medium tracking-wider text-stone-400 uppercase transition-colors hover:text-coffee-700"
-		>
-			Reset
-		</button>
+		<div class="flex items-center gap-4">
+			<a
+				href="/faq"
+				class="text-xs font-medium tracking-wider text-stone-400 uppercase transition-colors hover:text-coffee-700"
+			>
+				FAQ
+			</a>
+			<button
+				onclick={onReset}
+				class="text-xs font-medium tracking-wider text-stone-400 uppercase transition-colors hover:text-coffee-700"
+			>
+				Reset
+			</button>
+		</div>
 	</div>
 </header>
