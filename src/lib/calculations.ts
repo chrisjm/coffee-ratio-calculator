@@ -82,7 +82,15 @@ export function getInputSpoonVal(state: State, spoonWeight: number): string {
 }
 
 export function getResultSpoonVal(state: State, ratio: number, spoonWeight: number): string {
-	const beans = state.amount / ratio;
+	let beans: number;
+	if (state.mode === 'beans') {
+		// In beans mode, we're showing water needed, so calculate beans from input
+		beans = state.amount;
+	} else {
+		// In water/cups mode, calculate beans needed from water volume
+		const waterMl = cupsToMl(state.amount);
+		beans = waterMl / ratio;
+	}
 	return `~ ${(beans / spoonWeight).toFixed(1)} heaping tbsp`;
 }
 
