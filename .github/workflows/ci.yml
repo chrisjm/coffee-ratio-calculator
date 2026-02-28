@@ -37,5 +37,8 @@ jobs:
       - name: Run Svelte type check
         run: pnpm run check
 
+      - name: Run unit tests
+        run: pnpm run test:run
+
       - name: Build project
         run: pnpm run build
