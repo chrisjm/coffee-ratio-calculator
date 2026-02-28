@@ -24,7 +24,8 @@ export type AppMode = 'beans' | 'water';
 
 export interface State {
 	mode: AppMode;
-	amount: number;
+	beansAmount: number;
+	cupsAmount: number;
 	brewMethod: BrewMethod;
 	aeropressMode: AeropressMode;
 	roast: RoastLevel;

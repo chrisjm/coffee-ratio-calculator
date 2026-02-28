@@ -34,7 +34,8 @@
 
 	const initialState: State = {
 		mode: 'beans',
-		amount: 20,
+		beansAmount: 20,
+		cupsAmount: 2,
 		brewMethod: 'pour-over',
 		aeropressMode: 'immersion',
 		roast: 'medium',
@@ -77,7 +78,8 @@
 
 	const resetApp = () => {
 		appState.mode = initialState.mode;
-		appState.amount = initialState.amount;
+		appState.beansAmount = initialState.beansAmount;
+		appState.cupsAmount = initialState.cupsAmount;
 		appState.brewMethod = initialState.brewMethod;
 		appState.aeropressMode = initialState.aeropressMode;
 		appState.roast = initialState.roast;
@@ -91,7 +93,11 @@
 	};
 
 	const handleAmountChange = (amount: number) => {
-		appState.amount = amount;
+		if (appState.mode === 'beans') {
+			appState.beansAmount = amount;
+		} else {
+			appState.cupsAmount = amount;
+		}
 	};
 
 	const handleRoastChange = (roast: State['roast']) => {
@@ -125,9 +131,18 @@
 		const saved = localStorage.getItem(storageKey);
 		if (saved) {
 			try {
-				const parsed = JSON.parse(saved) as Partial<State>;
+				const parsed = JSON.parse(saved) as Partial<State> & { amount?: number };
 				if (parsed.mode) appState.mode = parsed.mode;
-				if (typeof parsed.amount === 'number') appState.amount = parsed.amount;
+				if (typeof parsed.beansAmount === 'number') appState.beansAmount = parsed.beansAmount;
+				if (typeof parsed.cupsAmount === 'number') appState.cupsAmount = parsed.cupsAmount;
+				// Migration: older versions stored a single `amount`
+				if (typeof parsed.amount === 'number') {
+					if (parsed.mode === 'water') {
+						appState.cupsAmount = parsed.amount;
+					} else {
+						appState.beansAmount = parsed.amount;
+					}
+				}
 				if (parsed.brewMethod) appState.brewMethod = parsed.brewMethod;
 				if (parsed.aeropressMode) appState.aeropressMode = parsed.aeropressMode;
 				if (parsed.roast) appState.roast = parsed.roast;
@@ -177,7 +192,7 @@
 	<main class="mx-auto w-full max-w-md flex-grow space-y-8 px-5 py-6 pb-32">
 		<ModeInput
 			mode={appState.mode}
-			amount={appState.amount}
+			amount={appState.mode === 'beans' ? appState.beansAmount : appState.cupsAmount}
 			{inputLabel}
 			{inputHint}
 			{unitLabel}

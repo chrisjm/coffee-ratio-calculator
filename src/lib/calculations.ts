@@ -78,31 +78,38 @@ export function getResultUnit(state: State, isEspresso: boolean): string {
 }
 
 export function getInputSpoonVal(state: State, spoonWeight: number): string {
-	return `~ ${(state.amount / spoonWeight).toFixed(1)} heaping tbsp`;
+	const isEspresso = isEspressoMode(state);
+	const amount = state.mode === 'beans' || isEspresso ? state.beansAmount : state.cupsAmount;
+	return `~ ${(amount / spoonWeight).toFixed(1)} heaping tbsp`;
 }
 
 export function getResultSpoonVal(state: State, ratio: number, spoonWeight: number): string {
+	const isEspresso = isEspressoMode(state);
 	let beans: number;
 	if (state.mode === 'beans') {
 		// In beans mode, we're showing water needed, so calculate beans from input
-		beans = state.amount;
+		beans = state.beansAmount;
 	} else {
-		// In water/cups mode, calculate beans needed from water volume
-		const waterMl = cupsToMl(state.amount);
-		beans = waterMl / ratio;
+		if (isEspresso) {
+			beans = state.beansAmount;
+		} else {
+			// In water/cups mode, calculate beans needed from water volume
+			const waterMl = cupsToMl(state.cupsAmount);
+			beans = waterMl / ratio;
+		}
 	}
 	return `~ ${(beans / spoonWeight).toFixed(1)} heaping tbsp`;
 }
 
 export function getResultValue(state: State, ratio: number, isEspresso: boolean): string {
 	if (state.mode === 'beans') {
-		return Math.round(state.amount * ratio).toString();
+		return Math.round(state.beansAmount * ratio).toString();
 	}
 	if (isEspresso) {
-		const espressoYield = state.amount * ratio;
+		const espressoYield = state.beansAmount * ratio;
 		return espressoYield < 100 ? espressoYield.toFixed(1) : Math.round(espressoYield).toString();
 	}
-	const waterMl = cupsToMl(state.amount);
+	const waterMl = cupsToMl(state.cupsAmount);
 	const beans = waterMl / ratio;
 	return beans < 100 ? beans.toFixed(1) : Math.round(beans).toString();
 }
@@ -110,35 +117,36 @@ export function getResultValue(state: State, ratio: number, isEspresso: boolean)
 export function getInputConversion(state: State, isEspresso: boolean): string {
 	const isBeansMode = state.mode === 'beans';
 	if (isBeansMode) {
-		return `${gramsToOz(state.amount).toFixed(1)} oz`;
+		return `${gramsToOz(state.beansAmount).toFixed(1)} oz`;
 	}
 	if (isEspresso) {
-		return `${gramsToOz(state.amount).toFixed(1)} oz`;
+		return `${gramsToOz(state.beansAmount).toFixed(1)} oz`;
 	}
-	return `${Math.round(cupsToMl(state.amount))} ml`;
+	return `${Math.round(cupsToMl(state.cupsAmount))} ml`;
 }
 
 export function getResultConversion(state: State, ratio: number, isEspresso: boolean): string {
 	if (state.mode === 'beans') {
 		if (isEspresso) {
-			const espressoYield = state.amount * ratio;
+			const espressoYield = state.beansAmount * ratio;
 			return `${gramsToOz(espressoYield).toFixed(1)} oz`;
 		}
-		const waterMl = state.amount * ratio;
+		const waterMl = state.beansAmount * ratio;
 		return `${mlToCups(waterMl).toFixed(1)} cups`;
 	}
 	if (isEspresso) {
-		const espressoYield = state.amount * ratio;
+		const espressoYield = state.beansAmount * ratio;
 		return `${gramsToOz(espressoYield).toFixed(1)} oz`;
 	}
-	const waterMl = cupsToMl(state.amount);
+	const waterMl = cupsToMl(state.cupsAmount);
 	const beans = waterMl / ratio;
 	return `${gramsToOz(beans).toFixed(1)} oz`;
 }
 
 export function getWaterVolumeInfo(state: State): string | null {
 	if (state.mode !== 'water') return null;
-	const waterMl = cupsToMl(state.amount);
+	if (isEspressoMode(state)) return null;
+	const waterMl = cupsToMl(state.cupsAmount);
 	return `${Math.round(waterMl)} ml water`;
 }
 
