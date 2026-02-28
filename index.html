@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Smart Coffee Ratio</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;500;700&family=Merriweather:ital,wght@0,300;0,700;1,300&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["DM Sans", "sans-serif"],
+              serif: ["Merriweather", "serif"],
+            },
+            colors: {
+              coffee: {
+                50: "#fdf8f6",
+                100: "#f2e8e5",
+                200: "#eaddd7",
+                300: "#e0cec7",
+                400: "#d2bab0",
+                500: "#a18072",
+                600: "#8a6a5c",
+                700: "#735448",
+                800: "#5d4238",
+                900: "#4a332a",
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      /* Custom range slider styling */
+      input[type="range"] {
+        -webkit-appearance: none;
+        width: 100%;
+        background: transparent;
+      }
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        height: 24px;
+        width: 24px;
+        border-radius: 50%;
+        background: #735448;
+        margin-top: -10px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+      }
+      input[type="range"]::-webkit-slider-runnable-track {
+        width: 100%;
+        height: 4px;
+        cursor: pointer;
+        background: #eaddd7;
+        border-radius: 2px;
+      }
+      .roast-btn.active {
+        border-color: #735448;
+        background-color: #fdf8f6;
+        color: #4a332a;
+        box-shadow: 0 0 0 1px #735448 inset;
+      }
+      .quality-btn.active {
+        background-color: #735448;
+        color: white;
+        border-color: #735448;
+      }
+      /* Hide number input spinners */
+      input[type="number"]::-webkit-inner-spin-button,
+      input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-stone-50 text-stone-800 min-h-screen flex flex-col font-sans selection:bg-coffee-200"
+  >
+    <!-- Header -->
+    <header
+      class="bg-white border-b border-stone-200 sticky top-0 z-10 safe-top"
+    >
+      <div class="max-w-md mx-auto px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <i data-lucide="coffee" class="text-coffee-700 w-6 h-6"></i>
+          <h1
+            class="font-serif font-bold text-lg text-stone-900 tracking-tight"
+          >
+            Ratio Logic
+          </h1>
+        </div>
+        <button
+          onclick="resetApp()"
+          class="text-xs font-medium text-stone-400 hover:text-coffee-700 transition-colors uppercase tracking-wider"
+        >
+          Reset
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-md mx-auto w-full px-5 py-6 space-y-8 pb-32">
+      <!-- Input Section -->
+      <section class="space-y-4">
+        <div class="flex bg-stone-200 p-1 rounded-lg">
+          <button
+            id="mode-beans"
+            class="flex-1 py-2 text-sm font-medium rounded-md transition-all shadow-sm bg-white text-stone-900"
+            onclick="setMode('beans')"
+          >
+            I have Beans
+          </button>
+          <button
+            id="mode-water"
+            class="flex-1 py-2 text-sm font-medium rounded-md transition-all text-stone-500 hover:text-stone-700"
+            onclick="setMode('water')"
+          >
+            I want Coffee
+          </button>
+        </div>
+
+        <div class="relative group">
+          <label
+            for="amount"
+            class="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-1"
+            id="input-label"
+            >Weight (g)</label
+          >
+          <div class="relative">
+            <input
+              type="number"
+              id="amount"
+              value="20"
+              inputmode="decimal"
+              class="block w-full text-4xl font-serif font-bold text-stone-800 bg-transparent border-b-2 border-stone-200 focus:border-coffee-600 focus:outline-none py-2 transition-colors placeholder-stone-300"
+              placeholder="0"
+            />
+            <span
+              class="absolute right-0 bottom-3 text-stone-400 font-medium text-lg pointer-events-none"
+              id="unit-label"
+              >g</span
+            >
+          </div>
+
+          <!-- Spoon Helper (Input Mode) -->
+          <div
+            id="input-spoon-helper"
+            class="hidden mt-2 flex items-center gap-2 text-coffee-600 bg-coffee-50 p-2 rounded-lg inline-flex animate-fade-in"
+          >
+            <i data-lucide="utensils" class="w-3 h-3"></i>
+            <span class="text-xs font-bold font-serif" id="input-spoon-val"
+              >~ 2.5 heaping tbsp</span
+            >
+          </div>
+
+          <p
+            class="text-xs text-stone-400 mt-2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
+          >
+            <i data-lucide="info" class="w-3 h-3"></i>
+            <span id="input-hint">Enter the weight of your beans</span>
+          </p>
+        </div>
+      </section>
+
+      <!-- Smart Adjusters -->
+      <section class="space-y-6">
+        <!-- Roast Level -->
+        <div>
+          <label
+            class="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-3"
+            >Roast Level</label
+          >
+          <div class="grid grid-cols-3 gap-3">
+            <button
+              class="roast-btn active flex flex-col items-center justify-center gap-2 p-3 rounded-xl border-2 border-transparent bg-white shadow-sm hover:shadow-md transition-all"
+              onclick="setRoast('light')"
+            >
+              <div class="w-8 h-8 rounded-full bg-[#D4Bba3] shadow-inner"></div>
+              <span class="text-xs font-bold">Light</span>
+            </button>
+            <button
+              class="roast-btn flex flex-col items-center justify-center gap-2 p-3 rounded-xl border-2 border-transparent bg-white shadow-sm hover:shadow-md transition-all"
+              onclick="setRoast('medium')"
+            >
+              <div class="w-8 h-8 rounded-full bg-[#8A5E44] shadow-inner"></div>
+              <span class="text-xs font-bold">Medium</span>
+            </button>
+            <button
+              class="roast-btn flex flex-col items-center justify-center gap-2 p-3 rounded-xl border-2 border-transparent bg-white shadow-sm hover:shadow-md transition-all"
+              onclick="setRoast('dark')"
+            >
+              <div class="w-8 h-8 rounded-full bg-[#3E2723] shadow-inner"></div>
+              <span class="text-xs font-bold">Dark</span>
+            </button>
+          </div>
+          <p id="roast-desc" class="mt-2 text-xs text-stone-500 italic">
+            Light roasts are dense and need more water to extract properly.
+          </p>
+        </div>
+
+        <!-- Bean Quality / Freshness -->
+        <div>
+          <label
+            class="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-3"
+            >Freshness & Quality</label
+          >
+          <div class="flex gap-3">
+            <button
+              class="quality-btn active flex-1 py-3 px-4 rounded-xl border border-stone-200 bg-white text-stone-600 font-medium text-sm shadow-sm transition-all flex items-center justify-center gap-2"
+              onclick="setQuality('high')"
+            >
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+              <span>Specialty / Fresh</span>
+            </button>
+            <button
+              class="quality-btn flex-1 py-3 px-4 rounded-xl border border-stone-200 bg-white text-stone-600 font-medium text-sm shadow-sm transition-all flex items-center justify-center gap-2"
+              onclick="setQuality('low')"
+            >
+              <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+              <span>Commodity / Old</span>
+            </button>
+          </div>
+          <p id="quality-desc" class="mt-2 text-xs text-stone-500 italic">
+            Optimizing for clarity and flavor notes.
+          </p>
+        </div>
+      </section>
+
+      <!-- Info Card: Brew Guide -->
+      <section
+        class="bg-white rounded-2xl p-5 shadow-sm border border-stone-100"
+      >
+        <h3
+          class="text-sm font-bold text-stone-800 mb-4 flex items-center gap-2"
+        >
+          <i data-lucide="thermometer" class="w-4 h-4 text-coffee-600"></i>
+          Smart Brew Guide
+        </h3>
+        <div class="space-y-4">
+          <div
+            class="flex justify-between items-center border-b border-stone-50 pb-2"
+          >
+            <span class="text-sm text-stone-500">Water Temp</span>
+            <span id="rec-temp" class="text-sm font-bold text-stone-800"
+              >100°C / 212°F</span
+            >
+          </div>
+          <div
+            class="flex justify-between items-center border-b border-stone-50 pb-2"
+          >
+            <span class="text-sm text-stone-500">Grind Size</span>
+            <span id="rec-grind" class="text-sm font-bold text-stone-800"
+              >Medium-Fine</span
+            >
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-sm text-stone-500">Target Ratio</span>
+            <span
+              id="rec-ratio"
+              class="text-sm font-bold text-coffee-600 bg-coffee-50 px-2 py-1 rounded"
+              >1:17</span
+            >
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Sticky Footer Result -->
+    <footer
+      class="fixed bottom-0 w-full bg-stone-900 text-white z-50 rounded-t-3xl shadow-[0_-4px_20px_rgba(0,0,0,0.1)] transition-transform duration-300 ease-out"
+      id="result-bar"
+    >
+      <div class="max-w-md mx-auto px-6 py-5">
+        <div class="flex justify-between items-end mb-1">
+          <span
+            class="text-stone-400 text-sm font-medium uppercase tracking-wider"
+            id="result-label"
+            >Water Needed</span
+          >
+          <span class="text-stone-400 text-xs" id="ratio-display"
+            >Ratio 1:17</span
+          >
+        </div>
+        <div class="flex items-baseline gap-2">
+          <div class="flex items-baseline gap-1">
+            <span
+              id="result-value"
+              class="text-5xl font-serif font-bold tracking-tight text-white"
+              >340</span
+            >
+            <span id="result-unit" class="text-xl text-stone-400 font-medium"
+              >ml</span
+            >
+          </div>
+        </div>
+
+        <!-- Spoon Helper (Result Mode) -->
+        <div
+          id="result-spoon-helper"
+          class="hidden mt-2 flex items-center gap-2 text-stone-400"
+        >
+          <i data-lucide="utensils" class="w-3 h-3"></i>
+          <span class="text-xs italic" id="result-spoon-val"
+            >~ 3 heaping tbsp</span
+          >
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // State
+      const state = {
+        mode: "beans", // 'beans' or 'water'
+        amount: 20,
+        roast: "light", // 'light', 'medium', 'dark'
+        quality: "high", // 'high', 'low'
+      };
+
+      // Logic Matrix
+      // Added spoonWeight: Light is dense (heavy ~9g), Medium (~8g), Dark is porous/light (~7g)
+      const logic = {
+        light: {
+          spoonWeight: 9,
+          high: {
+            ratio: 17,
+            temp: "100°C / 212°F",
+            grind: "Medium-Fine",
+            desc: "High ratio to highlight delicate floral and acidic notes.",
+          },
+          low: {
+            ratio: 16,
+            temp: "96°C / 205°F",
+            grind: "Medium",
+            desc: "Slightly tighter ratio to add body and mask potential under-development.",
+          },
+        },
+        medium: {
+          spoonWeight: 8,
+          high: {
+            ratio: 16,
+            temp: "93°C / 200°F",
+            grind: "Medium",
+            desc: "The Golden Cup standard. Balanced sweetness and acidity.",
+          },
+          low: {
+            ratio: 15,
+            temp: "90°C / 195°F",
+            grind: "Medium",
+            desc: "Stronger brew to emphasize chocolatey notes over clarity.",
+          },
+        },
+        dark: {
+          spoonWeight: 7,
+          high: {
+            ratio: 15,
+            temp: "85°C / 185°F",
+            grind: "Coarse",
+            desc: "Rich and heavy body. Lower temp prevents bitterness.",
+          },
+          low: {
+            ratio: 14,
+            temp: "80°C / 176°F",
+            grind: "Coarse",
+            desc: "Very strong. Punchy. Ideal for adding milk or sugar.",
+          },
+        },
+      };
+
+      // DOM Elements
+      const els = {
+        amount: document.getElementById("amount"),
+        modeBeans: document.getElementById("mode-beans"),
+        modeWater: document.getElementById("mode-water"),
+        inputLabel: document.getElementById("input-label"),
+        inputHint: document.getElementById("input-hint"),
+        unitLabel: document.getElementById("unit-label"),
+        roastBtns: document.querySelectorAll(".roast-btn"),
+        qualityBtns: document.querySelectorAll(".quality-btn"),
+        roastDesc: document.getElementById("roast-desc"),
+        qualityDesc: document.getElementById("quality-desc"),
+        recTemp: document.getElementById("rec-temp"),
+        recGrind: document.getElementById("rec-grind"),
+        recRatio: document.getElementById("rec-ratio"),
+        resultValue: document.getElementById("result-value"),
+        resultUnit: document.getElementById("result-unit"),
+        resultLabel: document.getElementById("result-label"),
+        ratioDisplay: document.getElementById("ratio-display"),
+        // New Helpers
+        inputSpoonHelper: document.getElementById("input-spoon-helper"),
+        inputSpoonVal: document.getElementById("input-spoon-val"),
+        resultSpoonHelper: document.getElementById("result-spoon-helper"),
+        resultSpoonVal: document.getElementById("result-spoon-val"),
+      };
+
+      // Init
+      document.addEventListener("DOMContentLoaded", () => {
+        lucide.createIcons();
+        els.amount.addEventListener("input", (e) => {
+          state.amount = parseFloat(e.target.value) || 0;
+          calculate();
+        });
+        updateUI();
+      });
+
+      // Actions
+      function setMode(mode) {
+        state.mode = mode;
+        updateUI();
+      }
+
+      function setRoast(level) {
+        state.roast = level;
+        updateUI();
+      }
+
+      function setQuality(q) {
+        state.quality = q;
+        updateUI();
+      }
+
+      function resetApp() {
+        state.mode = "beans";
+        state.amount = 20;
+        state.roast = "light";
+        state.quality = "high";
+        els.amount.value = 20;
+        updateUI();
+      }
+
+      // Core Update Logic
+      function updateUI() {
+        // Update Mode Switcher
+        if (state.mode === "beans") {
+          els.modeBeans.className =
+            "flex-1 py-2 text-sm font-medium rounded-md transition-all shadow-sm bg-white text-stone-900";
+          els.modeWater.className =
+            "flex-1 py-2 text-sm font-medium rounded-md transition-all text-stone-500 hover:text-stone-700";
+          els.inputLabel.textContent = "Beans Weight";
+          els.inputHint.textContent = "Enter amount of beans you have";
+          els.unitLabel.textContent = "g";
+          els.resultLabel.textContent = "Water Needed";
+          els.resultUnit.textContent = "ml";
+
+          // Show Input Spoon Helper (Input is beans)
+          els.inputSpoonHelper.classList.remove("hidden");
+          els.resultSpoonHelper.classList.add("hidden");
+        } else {
+          els.modeWater.className =
+            "flex-1 py-2 text-sm font-medium rounded-md transition-all shadow-sm bg-white text-stone-900";
+          els.modeBeans.className =
+            "flex-1 py-2 text-sm font-medium rounded-md transition-all text-stone-500 hover:text-stone-700";
+          els.inputLabel.textContent = "Water Volume";
+          els.inputHint.textContent = "Enter amount of coffee you want";
+          els.unitLabel.textContent = "ml";
+          els.resultLabel.textContent = "Beans Needed";
+          els.resultUnit.textContent = "g";
+
+          // Show Result Spoon Helper (Result is beans)
+          els.inputSpoonHelper.classList.add("hidden");
+          els.resultSpoonHelper.classList.remove("hidden");
+        }
+
+        // Update Roast Buttons
+        els.roastBtns.forEach((btn, idx) => {
+          const levels = ["light", "medium", "dark"];
+          if (levels[idx] === state.roast) {
+            btn.classList.add("active");
+          } else {
+            btn.classList.remove("active");
+          }
+        });
+
+        // Update Quality Buttons
+        els.qualityBtns.forEach((btn, idx) => {
+          const quals = ["high", "low"];
+          if (quals[idx] === state.quality) {
+            btn.classList.add("active");
+          } else {
+            btn.classList.remove("active");
+          }
+        });
+
+        // Descriptions
+        const currentLogic = logic[state.roast][state.quality];
+        els.roastDesc.textContent =
+          state.roast === "light"
+            ? "Light roasts are dense; harder to extract."
+            : state.roast === "medium"
+              ? "Medium roasts are balanced and soluble."
+              : "Dark roasts extract very easily; prone to bitterness.";
+
+        els.qualityDesc.textContent = currentLogic.desc;
+
+        // Brew Guide
+        els.recTemp.textContent = currentLogic.temp;
+        els.recGrind.textContent = currentLogic.grind;
+        els.recRatio.textContent = `1:${currentLogic.ratio}`;
+        els.ratioDisplay.textContent = `Using Ratio 1:${currentLogic.ratio}`;
+
+        calculate();
+      }
+
+      function calculate() {
+        const currentRoast = logic[state.roast];
+        const ratio = currentRoast[state.quality].ratio;
+        const input = state.amount;
+        const spoonGrams = currentRoast.spoonWeight;
+
+        if (state.mode === "beans") {
+          // Input is Beans, Calc Water
+          // Water = Beans * Ratio
+          const water = input * ratio;
+          animateValue(els.resultValue, Math.round(water));
+
+          // Helper: Convert Input (Beans) to Spoons
+          const spoons = (input / spoonGrams).toFixed(1);
+          els.inputSpoonVal.textContent = `~ ${spoons} heaping tbsp`;
+        } else {
+          // Input is Water, Calc Beans
+          // Beans = Water / Ratio
+          const beans = input / ratio;
+          const val = beans < 100 ? beans.toFixed(1) : Math.round(beans);
+          animateValue(els.resultValue, val);
+
+          // Helper: Convert Result (Beans) to Spoons
+          const spoons = (beans / spoonGrams).toFixed(1);
+          els.resultSpoonVal.textContent = `~ ${spoons} heaping tbsp`;
+        }
+      }
+
+      // Simple number animation
+      function animateValue(obj, end) {
+        obj.innerHTML = end;
+      }
+    </script>
+  </body>
+</html>
