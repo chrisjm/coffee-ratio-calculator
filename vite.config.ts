@@ -3,8 +3,8 @@ import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-    optimizeDeps: {
-        exclude: ['lucide-svelte']
-    },
-    plugins: [tailwindcss(), sveltekit()]
+	optimizeDeps: {
+		exclude: ['lucide-svelte']
+	},
+	plugins: [tailwindcss(), sveltekit()]
 });

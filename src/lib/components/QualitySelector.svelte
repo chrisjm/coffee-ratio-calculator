@@ -14,7 +14,7 @@
 		Freshness &amp; Quality
 	</legend>
 	<div class="flex gap-3">
-		{#each qualityLevels as level}
+		{#each qualityLevels as level (level)}
 			<button
 				class={`quality-btn flex flex-1 items-center justify-center gap-2 rounded-xl border border-stone-200 bg-white px-4 py-3 text-sm font-medium text-stone-600 shadow-sm transition-all ${
 					quality === level ? 'active' : ''
