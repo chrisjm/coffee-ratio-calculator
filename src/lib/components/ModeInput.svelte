@@ -65,7 +65,7 @@
 				placeholder="0"
 			/>
 			<span
-				class="pointer-events-none absolute right-0 bottom-3 text-lg font-medium text-stone-400"
+				class="pointer-events-none absolute right-3 bottom-3 text-lg font-medium text-stone-400"
 			>
 				{unitLabel}
 			</span>
