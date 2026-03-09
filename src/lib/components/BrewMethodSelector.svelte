@@ -14,6 +14,7 @@
 		brewMethod,
 		aeropressMode,
 		showAeropressModeSelector,
+		showAeropressCapacityWarning,
 		onBrewMethodChange,
 		onAeropressModeChange
 	} = $props<{
@@ -21,6 +22,7 @@
 		brewMethod: BrewMethod;
 		aeropressMode: 'immersion' | 'espresso';
 		showAeropressModeSelector: boolean;
+		showAeropressCapacityWarning: boolean;
 		onBrewMethodChange: (method: BrewMethod) => void;
 		onAeropressModeChange: (mode: 'immersion' | 'espresso') => void;
 	}>();
@@ -79,6 +81,17 @@
 			>
 				Espresso-Style
 			</button>
+		</div>
+	{/if}
+
+	{#if brewMethod === 'aeropress' && showAeropressCapacityWarning}
+		<div
+			class="mt-4 flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-amber-900"
+		>
+			<AlertCircle class="mt-0.5 h-4 w-4 shrink-0" />
+			<p class="text-xs leading-relaxed">
+				Large AeroPress brews may exceed typical chamber capacity.
+			</p>
 		</div>
 	{/if}
 </fieldset>

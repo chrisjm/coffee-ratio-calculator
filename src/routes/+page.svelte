@@ -67,8 +67,15 @@
 	const _isEspressoMode = $derived(isEspressoMode(appState));
 	const amountStep = $derived(appState.mode === 'beans' || _isEspressoMode ? 1 : 0.5);
 
+	const AEROPRESS_SOFT_MAX_CUPS = 1.5;
+
 	const roastDesc = $derived(getRoastDescription(appState.roast));
 	const showAeropressModeSelector = $derived(appState.mode === 'beans');
+	const showAeropressCapacityWarning = $derived(
+		appState.mode === 'water' &&
+			appState.brewMethod === 'aeropress' &&
+			appState.cupsAmount > AEROPRESS_SOFT_MAX_CUPS
+	);
 
 	const inputLabel = $derived(getInputLabel(appState, _isEspressoMode));
 	const inputHint = $derived(getInputHint(appState, _isEspressoMode));
@@ -254,6 +261,7 @@
 				brewMethod={appState.brewMethod}
 				aeropressMode={appState.aeropressMode}
 				{showAeropressModeSelector}
+				{showAeropressCapacityWarning}
 				onBrewMethodChange={handleBrewMethodChange}
 				onAeropressModeChange={handleAeropressModeChange}
 			/>
