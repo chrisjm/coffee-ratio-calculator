@@ -159,20 +159,20 @@ describe('brewLogic', () => {
 
 			it('should increase ratio for finer grind', () => {
 				const result = getGrindAdjustedRatio('medium-fine', 'medium', 15, false);
-				expect(result).toBe(15.5);
+				expect(result).toBe(15.25);
 			});
 
 			it('should decrease ratio for coarser grind', () => {
 				const result = getGrindAdjustedRatio('medium-coarse', 'medium', 15, false);
-				expect(result).toBe(14.5);
+				expect(result).toBe(14.75);
 			});
 
-			it('should adjust by 0.5 per grind step for filter brewing', () => {
+			it('should adjust by 0.25 per grind step for filter brewing', () => {
 				const twoStepsFiner = getGrindAdjustedRatio('medium-fine', 'medium-coarse', 15, false);
-				expect(twoStepsFiner).toBe(16);
+				expect(twoStepsFiner).toBe(15.5);
 
 				const twoStepsCoarser = getGrindAdjustedRatio('medium-coarse', 'medium-fine', 15, false);
-				expect(twoStepsCoarser).toBe(14);
+				expect(twoStepsCoarser).toBe(14.5);
 			});
 
 			it('should enforce minimum ratio of 10 for filter brewing', () => {
@@ -194,20 +194,20 @@ describe('brewLogic', () => {
 
 			it('should increase ratio for finer grind', () => {
 				const result = getGrindAdjustedRatio('extra-fine', 'fine', 2.5, true);
-				expect(result).toBe(2.65);
+				expect(result).toBe(2.6);
 			});
 
 			it('should decrease ratio for coarser grind', () => {
 				const result = getGrindAdjustedRatio('medium-fine', 'fine', 2.5, true);
-				expect(result).toBe(2.35);
+				expect(result).toBe(2.4);
 			});
 
-			it('should adjust by 0.15 per grind step for espresso', () => {
+			it('should adjust by 0.1 per grind step for espresso', () => {
 				const twoStepsFiner = getGrindAdjustedRatio('extra-fine', 'medium-fine', 2.5, true);
-				expect(twoStepsFiner).toBeCloseTo(2.8, 2);
+				expect(twoStepsFiner).toBeCloseTo(2.7, 2);
 
 				const twoStepsCoarser = getGrindAdjustedRatio('medium-fine', 'extra-fine', 2.5, true);
-				expect(twoStepsCoarser).toBeCloseTo(2.2, 2);
+				expect(twoStepsCoarser).toBeCloseTo(2.3, 2);
 			});
 
 			it('should enforce minimum ratio of 1.5 for espresso', () => {

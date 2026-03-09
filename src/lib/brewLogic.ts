@@ -442,9 +442,9 @@ export function getGrindAdjustedRatio(
 	}
 
 	// Adjustment per grind step:
-	// - For filter brewing: ±0.5 ratio per step
-	// - For espresso: ±0.15 ratio per step (more sensitive)
-	const adjustmentPerStep = isEspresso ? 0.15 : 0.5;
+	// - For filter brewing: ±0.25 ratio per step
+	// - For espresso: ±0.1 ratio per step (more sensitive)
+	const adjustmentPerStep = isEspresso ? 0.1 : 0.25;
 
 	// Finer grind (negative deviation) = higher ratio (more water)
 	// Coarser grind (positive deviation) = lower ratio (less water)
