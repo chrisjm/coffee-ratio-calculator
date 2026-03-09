@@ -9,14 +9,21 @@
 		| 'preground-espresso'
 		| 'cowboy';
 
-	const { brewMethods, brewMethod, aeropressMode, onBrewMethodChange, onAeropressModeChange } =
-		$props<{
-			brewMethods: readonly BrewMethod[];
-			brewMethod: BrewMethod;
-			aeropressMode: 'immersion' | 'espresso';
-			onBrewMethodChange: (method: BrewMethod) => void;
-			onAeropressModeChange: (mode: 'immersion' | 'espresso') => void;
-		}>();
+	const {
+		brewMethods,
+		brewMethod,
+		aeropressMode,
+		showAeropressModeSelector,
+		onBrewMethodChange,
+		onAeropressModeChange
+	} = $props<{
+		brewMethods: readonly BrewMethod[];
+		brewMethod: BrewMethod;
+		aeropressMode: 'immersion' | 'espresso';
+		showAeropressModeSelector: boolean;
+		onBrewMethodChange: (method: BrewMethod) => void;
+		onAeropressModeChange: (mode: 'immersion' | 'espresso') => void;
+	}>();
 
 	const methodConfig: Record<BrewMethod, { label: string; icon: typeof Coffee }> = {
 		'pour-over': { label: 'Pour-Over', icon: Coffee },
@@ -50,7 +57,7 @@
 		{/each}
 	</div>
 
-	{#if brewMethod === 'aeropress'}
+	{#if brewMethod === 'aeropress' && showAeropressModeSelector}
 		<div class="mt-4 flex gap-2">
 			<button
 				class={`flex-1 rounded-lg border px-3 py-2 text-xs font-medium transition-all ${

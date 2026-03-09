@@ -68,6 +68,7 @@
 	const amountStep = $derived(appState.mode === 'beans' || _isEspressoMode ? 1 : 0.5);
 
 	const roastDesc = $derived(getRoastDescription(appState.roast));
+	const showAeropressModeSelector = $derived(appState.mode === 'beans');
 
 	const inputLabel = $derived(getInputLabel(appState, _isEspressoMode));
 	const inputHint = $derived(getInputHint(appState, _isEspressoMode));
@@ -99,6 +100,9 @@
 
 	const handleModeChange = (mode: State['mode']) => {
 		appState.mode = mode;
+		if (mode === 'water' && appState.brewMethod === 'aeropress') {
+			appState.aeropressMode = 'immersion';
+		}
 	};
 
 	const handleAmountChange = (amount: number) => {
@@ -130,6 +134,9 @@
 
 	const handleBrewMethodChange = (method: State['brewMethod']) => {
 		appState.brewMethod = method;
+		if (method === 'aeropress' && appState.mode === 'water') {
+			appState.aeropressMode = 'immersion';
+		}
 		if (appState.grindMode === 'pre-ground' || method === 'preground-espresso') {
 			appState.grindMode = 'pre-ground';
 			syncRecommendedGrind();
@@ -246,6 +253,7 @@
 				{brewMethods}
 				brewMethod={appState.brewMethod}
 				aeropressMode={appState.aeropressMode}
+				{showAeropressModeSelector}
 				onBrewMethodChange={handleBrewMethodChange}
 				onAeropressModeChange={handleAeropressModeChange}
 			/>
