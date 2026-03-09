@@ -19,6 +19,7 @@
 		getInputLabel,
 		getInputHint,
 		getUnitLabel,
+		getFooterLabel,
 		getResultLabel,
 		getResultUnit,
 		getInputSpoonVal,
@@ -26,7 +27,9 @@
 		getResultValue,
 		getInputConversion,
 		getResultConversion,
-		getWaterVolumeInfo,
+		getHotWaterNeededInfo,
+		getHotWaterNeededValue,
+		getHotWaterNeededUnit,
 		getAdjustedRatio
 	} from '$lib/calculations';
 
@@ -69,6 +72,7 @@
 	const inputLabel = $derived(getInputLabel(appState, _isEspressoMode));
 	const inputHint = $derived(getInputHint(appState, _isEspressoMode));
 	const unitLabel = $derived(getUnitLabel(appState, _isEspressoMode));
+	const footerLabel = $derived(getFooterLabel(appState, _isEspressoMode));
 	const resultLabel = $derived(getResultLabel(appState, _isEspressoMode));
 	const resultUnit = $derived(getResultUnit(appState, _isEspressoMode));
 	const inputSpoonVal = $derived(getInputSpoonVal(appState, spoonWeight));
@@ -76,7 +80,9 @@
 	const resultValue = $derived(getResultValue(appState, ratio, _isEspressoMode));
 	const inputConversion = $derived(getInputConversion(appState, _isEspressoMode));
 	const resultConversion = $derived(getResultConversion(appState, ratio, _isEspressoMode));
-	const waterVolumeInfo = $derived(getWaterVolumeInfo(appState));
+	const hotWaterNeededInfo = $derived(getHotWaterNeededInfo(appState, ratio, _isEspressoMode));
+	const hotWaterNeededValue = $derived(getHotWaterNeededValue(appState, ratio, _isEspressoMode));
+	const hotWaterNeededUnit = $derived(getHotWaterNeededUnit(appState, _isEspressoMode));
 
 	const resetApp = () => {
 		appState.mode = initialState.mode;
@@ -285,11 +291,14 @@
 	<ResultFooter
 		mode={appState.mode}
 		{ratio}
+		{footerLabel}
 		{resultLabel}
 		{resultValue}
 		{resultUnit}
 		{resultSpoonVal}
 		{resultConversion}
-		{waterVolumeInfo}
+		{hotWaterNeededValue}
+		{hotWaterNeededUnit}
+		{hotWaterNeededInfo}
 	/>
 </div>

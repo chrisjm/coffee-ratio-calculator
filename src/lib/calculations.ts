@@ -2,6 +2,19 @@ import type { State, BrewConfig } from './types';
 import { brewLogic, getGrindAdjustedRatio } from './brewLogic';
 import { cupsToMl, mlToCups, gramsToOz } from './utils/conversions';
 
+const RETAINED_WATER_PER_GRAM = 2;
+
+export interface BrewRequirements {
+	isEspresso: boolean;
+	desiredOutput: number;
+	desiredOutputUnit: 'cups' | 'g';
+	desiredOutputMl: number;
+	beansNeeded: number;
+	hotWaterNeededMl: number;
+	finalOutputMl: number;
+	finalOutputG: number;
+}
+
 export function getCurrentBrewMethodLogic(state: State): BrewConfig {
 	if (state.brewMethod === 'aeropress') {
 		const aeropressLogic = brewLogic.aeropress[state.aeropressMode];
@@ -40,18 +53,88 @@ export function getRoastDescription(roast: State['roast']): string {
 	}
 }
 
+export function getBrewRequirements(
+	state: State,
+	ratio: number,
+	isEspresso: boolean
+): BrewRequirements {
+	if (state.mode === 'beans') {
+		if (isEspresso) {
+			const finalOutputG = state.beansAmount * ratio;
+			return {
+				isEspresso,
+				desiredOutput: finalOutputG,
+				desiredOutputUnit: 'g',
+				desiredOutputMl: finalOutputG,
+				beansNeeded: state.beansAmount,
+				hotWaterNeededMl: finalOutputG,
+				finalOutputMl: finalOutputG,
+				finalOutputG
+			};
+		}
+
+		const hotWaterNeededMl = state.beansAmount * ratio;
+		const finalOutputMl = Math.max(
+			0,
+			hotWaterNeededMl - state.beansAmount * RETAINED_WATER_PER_GRAM
+		);
+
+		return {
+			isEspresso,
+			desiredOutput: mlToCups(finalOutputMl),
+			desiredOutputUnit: 'cups',
+			desiredOutputMl: finalOutputMl,
+			beansNeeded: state.beansAmount,
+			hotWaterNeededMl,
+			finalOutputMl,
+			finalOutputG: finalOutputMl
+		};
+	}
+
+	if (isEspresso) {
+		const finalOutputG = state.cupsAmount;
+		const beansNeeded = ratio === 0 ? 0 : finalOutputG / ratio;
+		return {
+			isEspresso,
+			desiredOutput: finalOutputG,
+			desiredOutputUnit: 'g',
+			desiredOutputMl: finalOutputG,
+			beansNeeded,
+			hotWaterNeededMl: finalOutputG,
+			finalOutputMl: finalOutputG,
+			finalOutputG
+		};
+	}
+
+	const desiredOutputMl = cupsToMl(state.cupsAmount);
+	const beansNeeded =
+		ratio <= RETAINED_WATER_PER_GRAM ? 0 : desiredOutputMl / (ratio - RETAINED_WATER_PER_GRAM);
+	const hotWaterNeededMl = beansNeeded * ratio;
+
+	return {
+		isEspresso,
+		desiredOutput: state.cupsAmount,
+		desiredOutputUnit: 'cups',
+		desiredOutputMl,
+		beansNeeded,
+		hotWaterNeededMl,
+		finalOutputMl: desiredOutputMl,
+		finalOutputG: desiredOutputMl
+	};
+}
+
 export function getInputLabel(state: State, isEspresso: boolean): string {
 	const isBeansMode = state.mode === 'beans';
 	if (isBeansMode) return 'Beans Weight';
-	if (isEspresso) return 'Beans Weight';
-	return 'Number of Cups';
+	if (isEspresso) return 'Espresso You Want';
+	return 'Coffee You Want';
 }
 
 export function getInputHint(state: State, isEspresso: boolean): string {
 	const isBeansMode = state.mode === 'beans';
 	if (isBeansMode) return 'Enter amount of beans you have';
-	if (isEspresso) return 'Enter amount of beans you have';
-	return '8oz per cup';
+	if (isEspresso) return 'Final espresso yield after brewing';
+	return 'Final cups in your mug after brewing';
 }
 
 export function getUnitLabel(state: State, isEspresso: boolean): string {
@@ -69,6 +152,13 @@ export function getResultLabel(state: State, isEspresso: boolean): string {
 	return 'Beans Needed';
 }
 
+export function getFooterLabel(state: State, isEspresso: boolean): string {
+	if (state.mode === 'water') {
+		return 'Beans & Water Needed';
+	}
+	return getResultLabel(state, isEspresso);
+}
+
 export function getResultUnit(state: State, isEspresso: boolean): string {
 	const isBeansMode = state.mode === 'beans';
 	if (isBeansMode) {
@@ -84,34 +174,24 @@ export function getInputSpoonVal(state: State, spoonWeight: number): string {
 }
 
 export function getResultSpoonVal(state: State, ratio: number, spoonWeight: number): string {
-	const isEspresso = isEspressoMode(state);
-	let beans: number;
-	if (state.mode === 'beans') {
-		// In beans mode, we're showing water needed, so calculate beans from input
-		beans = state.beansAmount;
-	} else {
-		if (isEspresso) {
-			beans = state.beansAmount;
-		} else {
-			// In water/cups mode, calculate beans needed from water volume
-			const waterMl = cupsToMl(state.cupsAmount);
-			beans = waterMl / ratio;
-		}
-	}
+	const requirements = getBrewRequirements(state, ratio, isEspressoMode(state));
+	const beans = requirements.beansNeeded;
 	return `~ ${(beans / spoonWeight).toFixed(1)} heaping tbsp`;
 }
 
 export function getResultValue(state: State, ratio: number, isEspresso: boolean): string {
+	const requirements = getBrewRequirements(state, ratio, isEspresso);
 	if (state.mode === 'beans') {
-		return Math.round(state.beansAmount * ratio).toString();
+		if (isEspresso) {
+			return requirements.finalOutputG < 100
+				? requirements.finalOutputG.toFixed(1)
+				: Math.round(requirements.finalOutputG).toString();
+		}
+		return Math.round(requirements.hotWaterNeededMl).toString();
 	}
-	if (isEspresso) {
-		const espressoYield = state.beansAmount * ratio;
-		return espressoYield < 100 ? espressoYield.toFixed(1) : Math.round(espressoYield).toString();
-	}
-	const waterMl = cupsToMl(state.cupsAmount);
-	const beans = waterMl / ratio;
-	return beans < 100 ? beans.toFixed(1) : Math.round(beans).toString();
+	return requirements.beansNeeded < 100
+		? requirements.beansNeeded.toFixed(1)
+		: Math.round(requirements.beansNeeded).toString();
 }
 
 export function getInputConversion(state: State, isEspresso: boolean): string {
@@ -120,28 +200,21 @@ export function getInputConversion(state: State, isEspresso: boolean): string {
 		return `${gramsToOz(state.beansAmount).toFixed(1)} oz`;
 	}
 	if (isEspresso) {
-		return `${gramsToOz(state.beansAmount).toFixed(1)} oz`;
+		return `${gramsToOz(state.cupsAmount).toFixed(1)} oz`;
 	}
 	const waterMl = cupsToMl(state.cupsAmount);
 	return `${Math.round(waterMl)} ml (~${mlToCups(waterMl).toFixed(1)} cups)`;
 }
 
 export function getResultConversion(state: State, ratio: number, isEspresso: boolean): string {
+	const requirements = getBrewRequirements(state, ratio, isEspresso);
 	if (state.mode === 'beans') {
 		if (isEspresso) {
-			const espressoYield = state.beansAmount * ratio;
-			return `${gramsToOz(espressoYield).toFixed(1)} oz`;
+			return `${gramsToOz(requirements.finalOutputG).toFixed(1)} oz`;
 		}
-		const waterMl = state.beansAmount * ratio;
-		return `${mlToCups(waterMl).toFixed(1)} cups`;
+		return `${mlToCups(requirements.hotWaterNeededMl).toFixed(1)} cups`;
 	}
-	if (isEspresso) {
-		const espressoYield = state.beansAmount * ratio;
-		return `${gramsToOz(espressoYield).toFixed(1)} oz`;
-	}
-	const waterMl = cupsToMl(state.cupsAmount);
-	const beans = waterMl / ratio;
-	return `${gramsToOz(beans).toFixed(1)} oz`;
+	return `${gramsToOz(requirements.beansNeeded).toFixed(1)} oz`;
 }
 
 export function getWaterVolumeInfo(state: State): string | null {
@@ -149,6 +222,33 @@ export function getWaterVolumeInfo(state: State): string | null {
 	if (isEspressoMode(state)) return null;
 	const waterMl = cupsToMl(state.cupsAmount);
 	return `${Math.round(waterMl)} ml water`;
+}
+
+export function getHotWaterNeededInfo(state: State, ratio: number, isEspresso: boolean): string {
+	if (state.mode === 'beans') {
+		return '';
+	}
+	const requirements = getBrewRequirements(state, ratio, isEspresso);
+	const cups = mlToCups(requirements.hotWaterNeededMl);
+	if (isEspresso) {
+		return `${Math.round(requirements.hotWaterNeededMl)} g hot water`;
+	}
+	return `${Math.round(requirements.hotWaterNeededMl)} ml hot water (~${cups.toFixed(1)} cups)`;
+}
+
+export function getHotWaterNeededValue(state: State, ratio: number, isEspresso: boolean): string {
+	const requirements = getBrewRequirements(state, ratio, isEspresso);
+	if (isEspresso) {
+		return Math.round(requirements.hotWaterNeededMl).toString();
+	}
+	return Math.round(requirements.hotWaterNeededMl).toString();
+}
+
+export function getHotWaterNeededUnit(state: State, isEspresso: boolean): string {
+	if (state.mode === 'beans' && !isEspresso) {
+		return 'ml';
+	}
+	return isEspresso ? 'g' : 'ml';
 }
 
 /**

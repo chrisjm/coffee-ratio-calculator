@@ -8,6 +8,7 @@ import {
 	getInputLabel,
 	getInputHint,
 	getUnitLabel,
+	getFooterLabel,
 	getResultLabel,
 	getResultUnit,
 	getInputSpoonVal,
@@ -15,6 +16,7 @@ import {
 	getResultValue,
 	getInputConversion,
 	getResultConversion,
+	getHotWaterNeededInfo,
 	getWaterVolumeInfo,
 	getAdjustedRatio
 } from './calculations';
@@ -156,14 +158,14 @@ describe('calculations', () => {
 			expect(getInputLabel(state, true)).toBe('Beans Weight');
 		});
 
-		it('should return "Beans Weight" for espresso in water mode', () => {
+		it('should return "Espresso You Want" for espresso in water mode', () => {
 			const state = createMockState({ mode: 'water' });
-			expect(getInputLabel(state, true)).toBe('Beans Weight');
+			expect(getInputLabel(state, true)).toBe('Espresso You Want');
 		});
 
-		it('should return "Number of Cups" for non-espresso water mode', () => {
+		it('should return "Coffee You Want" for non-espresso water mode', () => {
 			const state = createMockState({ mode: 'water' });
-			expect(getInputLabel(state, false)).toBe('Number of Cups');
+			expect(getInputLabel(state, false)).toBe('Coffee You Want');
 		});
 	});
 
@@ -173,14 +175,14 @@ describe('calculations', () => {
 			expect(getInputHint(state, false)).toContain('beans you have');
 		});
 
-		it('should return beans hint for espresso', () => {
+		it('should return espresso yield hint for espresso', () => {
 			const state = createMockState({ mode: 'water' });
-			expect(getInputHint(state, true)).toContain('beans you have');
+			expect(getInputHint(state, true)).toContain('espresso yield');
 		});
 
-		it('should return cups hint for water mode', () => {
+		it('should return final output hint for water mode', () => {
 			const state = createMockState({ mode: 'water' });
-			expect(getInputHint(state, false)).toBe('8oz per cup');
+			expect(getInputHint(state, false)).toBe('Final cups in your mug after brewing');
 		});
 	});
 
@@ -219,6 +221,19 @@ describe('calculations', () => {
 		});
 	});
 
+	describe('getFooterLabel', () => {
+		it('should return water result label for beans mode', () => {
+			const state = createMockState({ mode: 'beans' });
+			expect(getFooterLabel(state, false)).toBe('Water Needed');
+		});
+
+		it('should return combined requirements label for water mode', () => {
+			const state = createMockState({ mode: 'water' });
+			expect(getFooterLabel(state, false)).toBe('Beans & Water Needed');
+			expect(getFooterLabel(state, true)).toBe('Beans & Water Needed');
+		});
+	});
+
 	describe('getResultUnit', () => {
 		it('should return "ml" for beans mode non-espresso', () => {
 			const state = createMockState({ mode: 'beans' });
@@ -252,10 +267,10 @@ describe('calculations', () => {
 		});
 
 		it('should handle espresso mode', () => {
-			const state = createMockState({ mode: 'water', cupsAmount: 2 });
+			const state = createMockState({ mode: 'water', cupsAmount: 45, brewMethod: 'espresso' });
 			const spoonWeight = 8;
 			const result = getInputSpoonVal(state, spoonWeight);
-			expect(result).toBe('~ 0.3 heaping tbsp');
+			expect(result).toBe('~ 2.3 heaping tbsp');
 		});
 	});
 
@@ -271,11 +286,11 @@ describe('calculations', () => {
 			const state = createMockState({ mode: 'water', cupsAmount: 2 });
 			const spoonWeight = 8;
 			const result = getResultSpoonVal(state, 16, spoonWeight);
-			expect(result).toContain('tbsp');
+			expect(result).toBe('~ 4.2 heaping tbsp');
 		});
 
 		it('should calculate spoons for water mode with espresso', () => {
-			const state = createMockState({ mode: 'water', beansAmount: 18, brewMethod: 'espresso' });
+			const state = createMockState({ mode: 'water', cupsAmount: 45, brewMethod: 'espresso' });
 			const spoonWeight = 8;
 			const result = getResultSpoonVal(state, 2.5, spoonWeight);
 			expect(result).toBe('~ 2.3 heaping tbsp');
@@ -292,19 +307,19 @@ describe('calculations', () => {
 		it('should calculate espresso yield in beans mode', () => {
 			const state = createMockState({ mode: 'beans', beansAmount: 18 });
 			const result = getResultValue(state, 2.5, true);
-			expect(result).toBe('45');
+			expect(result).toBe('45.0');
 		});
 
 		it('should calculate beans needed in water mode with small amount', () => {
 			const state = createMockState({ mode: 'water', cupsAmount: 2 });
 			const result = getResultValue(state, 16, false);
-			expect(result).toContain('.');
+			expect(result).toBe('33.8');
 		});
 
 		it('should calculate beans needed in water mode with large amount', () => {
 			const state = createMockState({ mode: 'water', cupsAmount: 10 });
 			const result = getResultValue(state, 16, false);
-			expect(result).toBe('148');
+			expect(result).toBe('169');
 		});
 
 		it('should handle large values without decimals', () => {
@@ -314,15 +329,15 @@ describe('calculations', () => {
 		});
 
 		it('should calculate espresso yield in water mode with small yield', () => {
-			const state = createMockState({ mode: 'water', beansAmount: 18, brewMethod: 'espresso' });
+			const state = createMockState({ mode: 'water', cupsAmount: 45, brewMethod: 'espresso' });
 			const result = getResultValue(state, 2.5, true);
-			expect(result).toBe('45.0');
+			expect(result).toBe('18.0');
 		});
 
 		it('should calculate espresso yield in water mode with large yield', () => {
-			const state = createMockState({ mode: 'water', beansAmount: 50, brewMethod: 'espresso' });
+			const state = createMockState({ mode: 'water', cupsAmount: 125, brewMethod: 'espresso' });
 			const result = getResultValue(state, 2.5, true);
-			expect(result).toBe('125');
+			expect(result).toBe('50.0');
 		});
 	});
 
@@ -343,9 +358,10 @@ describe('calculations', () => {
 		});
 
 		it('should convert grams to oz in water mode with espresso', () => {
-			const state = createMockState({ mode: 'water', beansAmount: 18, brewMethod: 'espresso' });
+			const state = createMockState({ mode: 'water', cupsAmount: 45, brewMethod: 'espresso' });
 			const result = getInputConversion(state, true);
 			expect(result).toContain('oz');
+			expect(result).toContain('1.6');
 		});
 	});
 
@@ -354,6 +370,7 @@ describe('calculations', () => {
 			const state = createMockState({ mode: 'beans', beansAmount: 20 });
 			const result = getResultConversion(state, 15, false);
 			expect(result).toContain('cups');
+			expect(result).toContain('1.3');
 		});
 
 		it('should convert espresso yield to oz in beans mode', () => {
@@ -366,13 +383,35 @@ describe('calculations', () => {
 			const state = createMockState({ mode: 'water', cupsAmount: 2 });
 			const result = getResultConversion(state, 16, false);
 			expect(result).toContain('oz');
+			expect(result).toContain('1.2');
 		});
 
 		it('should convert espresso yield to oz in water mode with espresso', () => {
-			const state = createMockState({ mode: 'water', beansAmount: 18, brewMethod: 'espresso' });
+			const state = createMockState({ mode: 'water', cupsAmount: 45, brewMethod: 'espresso' });
 			const result = getResultConversion(state, 2.5, true);
 			expect(result).toContain('oz');
-			expect(result).toContain('1.6');
+			expect(result).toContain('0.6');
+		});
+	});
+
+	describe('getHotWaterNeededInfo', () => {
+		it('should return empty hot water info for beans mode', () => {
+			const state = createMockState({ mode: 'beans', beansAmount: 20 });
+			const result = getHotWaterNeededInfo(state, 15, false);
+			expect(result).toBe('');
+		});
+
+		it('should return hot water needed for non-espresso water mode', () => {
+			const state = createMockState({ mode: 'water', cupsAmount: 2 });
+			const result = getHotWaterNeededInfo(state, 16, false);
+			expect(result).toContain('541');
+			expect(result).toContain('ml hot water');
+		});
+
+		it('should return hot water needed for espresso mode', () => {
+			const state = createMockState({ mode: 'water', cupsAmount: 45, brewMethod: 'espresso' });
+			const result = getHotWaterNeededInfo(state, 2.5, true);
+			expect(result).toBe('45 g hot water');
 		});
 	});
 
@@ -391,7 +430,7 @@ describe('calculations', () => {
 		});
 
 		it('should return null for espresso mode', () => {
-			const state = createMockState({ mode: 'water', brewMethod: 'espresso' });
+			const state = createMockState({ mode: 'water', cupsAmount: 45, brewMethod: 'espresso' });
 			const result = getWaterVolumeInfo(state);
 			expect(result).toBeNull();
 		});
