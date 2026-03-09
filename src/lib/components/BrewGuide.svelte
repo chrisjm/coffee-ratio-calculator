@@ -1,28 +1,38 @@
 <script lang="ts">
 	import { Thermometer, Clock } from '@lucide/svelte';
-	import type { GrindSize } from '$lib/types';
+	import type { GrindMode, GrindSize } from '$lib/types';
 
-	const { temp, grind, brewTime, ratio, baseRatio, recommendedGrind } = $props<{
+	const { temp, grindMode, grind, brewTime, ratio, baseRatio, recommendedGrind } = $props<{
 		temp: string;
-		grind: string;
+		grindMode: GrindMode;
+		grind: GrindSize;
 		brewTime: string;
 		ratio: number;
 		baseRatio?: number;
 		recommendedGrind?: GrindSize;
 	}>();
 
-	const grindLabels: Record<string, string> = {
-		'extra-fine': 'Extra Fine',
-		fine: 'Fine',
-		'medium-fine': 'Medium-Fine',
-		medium: 'Medium',
-		'medium-coarse': 'Medium-Coarse',
-		coarse: 'Coarse'
+	const getGrindLabel = (grind: GrindSize) => {
+		switch (grind) {
+			case 'extra-fine':
+				return 'Extra Fine';
+			case 'fine':
+				return 'Fine';
+			case 'medium-fine':
+				return 'Medium-Fine';
+			case 'medium':
+				return 'Medium';
+			case 'medium-coarse':
+				return 'Medium-Coarse';
+			case 'coarse':
+				return 'Coarse';
+		}
 	};
 
-	const displayGrind = $derived(grindLabels[grind] || grind);
+	const displayGrind = $derived(getGrindLabel(grind));
 	const isRatioAdjusted = $derived(
-		baseRatio !== undefined &&
+		grindMode === 'custom' &&
+			baseRatio !== undefined &&
 			recommendedGrind !== undefined &&
 			grind !== recommendedGrind &&
 			Math.abs(ratio - baseRatio) > 0.01

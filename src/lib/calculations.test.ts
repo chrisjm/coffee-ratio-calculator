@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import type { State } from './types';
 import {
 	getCurrentBrewMethodLogic,
 	getSpoonWeight,
@@ -17,7 +18,6 @@ import {
 	getWaterVolumeInfo,
 	getAdjustedRatio
 } from './calculations';
-import type { State } from './types';
 
 const createMockState = (overrides: Partial<State> = {}): State => ({
 	mode: 'water',
@@ -27,6 +27,7 @@ const createMockState = (overrides: Partial<State> = {}): State => ({
 	aeropressMode: 'immersion',
 	roast: 'medium',
 	quality: 'high',
+	grindMode: 'pre-ground',
 	grindSize: 'medium',
 	grindOverride: false,
 	...overrides
@@ -413,12 +414,14 @@ describe('calculations', () => {
 				brewMethod: 'pour-over',
 				roast: 'medium',
 				quality: 'high',
+				grindMode: 'custom',
 				grindSize: 'medium'
 			});
 			const finerState = createMockState({
 				brewMethod: 'pour-over',
 				roast: 'medium',
 				quality: 'high',
+				grindMode: 'custom',
 				grindSize: 'medium-fine'
 			});
 

@@ -22,6 +22,8 @@ export type AeropressMode = 'immersion' | 'espresso';
 
 export type AppMode = 'beans' | 'water';
 
+export type GrindMode = 'pre-ground' | 'custom';
+
 export interface State {
 	mode: AppMode;
 	beansAmount: number;
@@ -30,6 +32,7 @@ export interface State {
 	aeropressMode: AeropressMode;
 	roast: RoastLevel;
 	quality: QualityLevel;
+	grindMode: GrindMode;
 	grindSize: GrindSize;
 	grindOverride: boolean;
 }

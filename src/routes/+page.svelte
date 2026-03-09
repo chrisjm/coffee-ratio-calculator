@@ -40,6 +40,7 @@
 		aeropressMode: 'immersion',
 		roast: 'medium',
 		quality: 'high',
+		grindMode: 'pre-ground',
 		grindSize: 'medium',
 		grindOverride: false
 	};
@@ -61,6 +62,7 @@
 	const recommendedGrind = $derived(currentBrewMethodLogic.grind);
 	const isGrindLocked = $derived(appState.brewMethod === 'preground-espresso');
 	const _isEspressoMode = $derived(isEspressoMode(appState));
+	const amountStep = $derived(appState.mode === 'beans' || _isEspressoMode ? 1 : 0.5);
 
 	const roastDesc = $derived(getRoastDescription(appState.roast));
 
@@ -84,6 +86,7 @@
 		appState.aeropressMode = initialState.aeropressMode;
 		appState.roast = initialState.roast;
 		appState.quality = initialState.quality;
+		appState.grindMode = initialState.grindMode;
 		appState.grindSize = initialState.grindSize;
 		appState.grindOverride = false;
 	};
@@ -100,30 +103,52 @@
 		}
 	};
 
+	const syncRecommendedGrind = () => {
+		appState.grindSize = recommendedGrind;
+		appState.grindOverride = false;
+	};
+
 	const handleRoastChange = (roast: State['roast']) => {
 		appState.roast = roast;
+		if (appState.grindMode === 'pre-ground' || isGrindLocked) {
+			syncRecommendedGrind();
+		}
 	};
 
 	const handleQualityChange = (quality: State['quality']) => {
 		appState.quality = quality;
+		if (appState.grindMode === 'pre-ground' || isGrindLocked) {
+			syncRecommendedGrind();
+		}
 	};
 
 	const handleBrewMethodChange = (method: State['brewMethod']) => {
 		appState.brewMethod = method;
-		if (!appState.grindOverride) {
-			appState.grindSize = recommendedGrind;
+		if (appState.grindMode === 'pre-ground' || method === 'preground-espresso') {
+			appState.grindMode = 'pre-ground';
+			syncRecommendedGrind();
 		}
 	};
 
 	const handleAeropressModeChange = (mode: State['aeropressMode']) => {
 		appState.aeropressMode = mode;
-		if (!appState.grindOverride) {
-			appState.grindSize = recommendedGrind;
+		if (appState.grindMode === 'pre-ground' || isGrindLocked) {
+			syncRecommendedGrind();
+		}
+	};
+
+	const handleGrindModeChange = (grindMode: State['grindMode']) => {
+		appState.grindMode = isGrindLocked ? 'pre-ground' : grindMode;
+		if (appState.grindMode === 'pre-ground') {
+			syncRecommendedGrind();
+		} else {
+			appState.grindOverride = appState.grindSize !== recommendedGrind;
 		}
 	};
 
 	const handleGrindChange = (grind: State['grindSize']) => {
 		appState.grindSize = grind;
+		appState.grindMode = 'custom';
 		appState.grindOverride = grind !== recommendedGrind;
 	};
 
@@ -147,9 +172,16 @@
 				if (parsed.aeropressMode) appState.aeropressMode = parsed.aeropressMode;
 				if (parsed.roast) appState.roast = parsed.roast;
 				if (parsed.quality) appState.quality = parsed.quality;
+				if (parsed.grindMode) appState.grindMode = parsed.grindMode;
 				if (parsed.grindSize) appState.grindSize = parsed.grindSize;
 				if (typeof parsed.grindOverride === 'boolean')
 					appState.grindOverride = parsed.grindOverride;
+				if (appState.brewMethod === 'preground-espresso') {
+					appState.grindMode = 'pre-ground';
+				}
+				if (appState.grindMode === 'pre-ground') {
+					syncRecommendedGrind();
+				}
 			} catch {
 				localStorage.removeItem(storageKey);
 			}
@@ -189,13 +221,14 @@
 >
 	<HeaderBar onReset={resetApp} />
 
-	<main class="pb-safe-32 mx-auto w-full max-w-md flex-grow space-y-8 px-5 py-6">
+	<main class="pb-safe-32 mx-auto w-full max-w-md grow space-y-8 px-5 py-6">
 		<ModeInput
 			mode={appState.mode}
 			amount={appState.mode === 'beans' ? appState.beansAmount : appState.cupsAmount}
 			{inputLabel}
 			{inputHint}
 			{unitLabel}
+			{amountStep}
 			{inputSpoonVal}
 			{inputConversion}
 			onModeChange={handleModeChange}
@@ -227,15 +260,18 @@
 
 			<GrindSizeSelector
 				{grindSizes}
+				grindMode={appState.grindMode}
 				grindSize={appState.grindSize}
 				{recommendedGrind}
 				isLocked={isGrindLocked}
+				onGrindModeChange={handleGrindModeChange}
 				onGrindChange={handleGrindChange}
 			/>
 		</section>
 
 		<BrewGuide
 			temp={currentBrewMethodLogic.temp}
+			grindMode={appState.grindMode}
 			grind={appState.grindSize}
 			brewTime={currentBrewMethodLogic.brewTime}
 			{ratio}

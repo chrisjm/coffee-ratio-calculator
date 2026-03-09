@@ -158,6 +158,9 @@ export function getWaterVolumeInfo(state: State): string | null {
 export function getAdjustedRatio(state: State): number {
 	const brewConfig = getCurrentBrewMethodLogic(state);
 	const baseRatio = brewConfig.ratio;
+	if (state.grindMode !== 'custom') {
+		return baseRatio;
+	}
 	const recommendedGrind = brewConfig.grind;
 	const selectedGrind = state.grindSize;
 	const isEspresso = isEspressoMode(state);
