@@ -58,7 +58,7 @@
 		>
 			{inputLabel}
 		</label>
-		<div class="flex items-end gap-3">
+		<div class="flex items-center gap-3">
 			<button
 				type="button"
 				class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-stone-200 bg-white text-2xl font-medium text-stone-700 transition-colors hover:border-stone-300 hover:text-stone-900"
