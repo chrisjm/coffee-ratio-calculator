@@ -32,6 +32,7 @@ const createMockState = (overrides: Partial<State> = {}): State => ({
 	grindMode: 'pre-ground',
 	grindSize: 'medium',
 	grindOverride: false,
+	ratioOffset: 0,
 	...overrides
 });
 
@@ -492,6 +493,119 @@ describe('calculations', () => {
 			});
 			const ratio = getAdjustedRatio(state);
 			expect(ratio).toBe(2.5);
+		});
+
+		it('should apply positive ratioOffset for filter brewing', () => {
+			const state = createMockState({
+				brewMethod: 'pour-over',
+				roast: 'medium',
+				quality: 'high',
+				ratioOffset: 1.0
+			});
+			const ratio = getAdjustedRatio(state);
+			expect(ratio).toBe(17); // base 16 + offset 1
+		});
+
+		it('should apply negative ratioOffset for filter brewing', () => {
+			const state = createMockState({
+				brewMethod: 'pour-over',
+				roast: 'medium',
+				quality: 'high',
+				ratioOffset: -1.0
+			});
+			const ratio = getAdjustedRatio(state);
+			expect(ratio).toBe(15); // base 16 - offset 1
+		});
+
+		it('should apply ratioOffset for espresso', () => {
+			const state = createMockState({
+				brewMethod: 'espresso',
+				roast: 'medium',
+				quality: 'high',
+				ratioOffset: 0.5
+			});
+			const ratio = getAdjustedRatio(state);
+			expect(ratio).toBe(3.0); // base 2.5 + offset 0.5
+		});
+
+		it('should apply negative ratioOffset for espresso', () => {
+			const state = createMockState({
+				brewMethod: 'espresso',
+				roast: 'medium',
+				quality: 'high',
+				ratioOffset: -0.5
+			});
+			const ratio = getAdjustedRatio(state);
+			expect(ratio).toBe(2.0); // base 2.5 - offset 0.5
+		});
+
+		it('should clamp filter ratio to minimum of 8', () => {
+			const state = createMockState({
+				brewMethod: 'pour-over',
+				roast: 'medium',
+				quality: 'high',
+				ratioOffset: -20
+			});
+			const ratio = getAdjustedRatio(state);
+			expect(ratio).toBe(8);
+		});
+
+		it('should clamp filter ratio to maximum of 22', () => {
+			const state = createMockState({
+				brewMethod: 'pour-over',
+				roast: 'medium',
+				quality: 'high',
+				ratioOffset: 20
+			});
+			const ratio = getAdjustedRatio(state);
+			expect(ratio).toBe(22);
+		});
+
+		it('should clamp espresso ratio to minimum of 1.0', () => {
+			const state = createMockState({
+				brewMethod: 'espresso',
+				roast: 'medium',
+				quality: 'high',
+				ratioOffset: -5
+			});
+			const ratio = getAdjustedRatio(state);
+			expect(ratio).toBe(1.0);
+		});
+
+		it('should clamp espresso ratio to maximum of 4.0', () => {
+			const state = createMockState({
+				brewMethod: 'espresso',
+				roast: 'medium',
+				quality: 'high',
+				ratioOffset: 5
+			});
+			const ratio = getAdjustedRatio(state);
+			expect(ratio).toBe(4.0);
+		});
+
+		it('should combine grind adjustment and ratioOffset', () => {
+			const state = createMockState({
+				brewMethod: 'pour-over',
+				roast: 'medium',
+				quality: 'high',
+				grindMode: 'custom',
+				grindSize: 'medium-fine',
+				ratioOffset: 1.0
+			});
+			const ratio = getAdjustedRatio(state);
+			// base 16 + 0.25 grind adjustment + 1.0 manual offset = 17.25
+			expect(ratio).toBe(17.25);
+		});
+
+		it('should return base ratio when ratioOffset is 0 and grind is pre-ground', () => {
+			const state = createMockState({
+				brewMethod: 'pour-over',
+				roast: 'medium',
+				quality: 'high',
+				ratioOffset: 0
+			});
+			const ratio = getAdjustedRatio(state);
+			expect(ratio).toBe(16);
 		});
 	});
 });

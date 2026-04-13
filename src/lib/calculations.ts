@@ -252,18 +252,27 @@ export function getHotWaterNeededUnit(state: State, isEspresso: boolean): string
 }
 
 /**
- * Get the ratio adjusted for the selected grind size.
- * This applies the grind adjustment logic from RATIO_RESEARCH.md
+ * Get the ratio adjusted for grind size and manual offset.
+ * Applies grind adjustment logic from RATIO_RESEARCH.md, then adds any manual ratioOffset.
  */
 export function getAdjustedRatio(state: State): number {
 	const brewConfig = getCurrentBrewMethodLogic(state);
 	const baseRatio = brewConfig.ratio;
-	if (state.grindMode !== 'custom') {
-		return baseRatio;
-	}
-	const recommendedGrind = brewConfig.grind;
-	const selectedGrind = state.grindSize;
 	const isEspresso = isEspressoMode(state);
 
-	return getGrindAdjustedRatio(selectedGrind, recommendedGrind, baseRatio, isEspresso);
+	let ratio = baseRatio;
+
+	if (state.grindMode === 'custom') {
+		const recommendedGrind = brewConfig.grind;
+		const selectedGrind = state.grindSize;
+		ratio = getGrindAdjustedRatio(selectedGrind, recommendedGrind, baseRatio, isEspresso);
+	}
+
+	ratio += state.ratioOffset;
+
+	if (isEspresso) {
+		return Math.max(1.0, Math.min(4.0, ratio));
+	} else {
+		return Math.max(8, Math.min(22, ratio));
+	}
 }

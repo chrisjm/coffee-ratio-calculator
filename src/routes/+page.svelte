@@ -45,7 +45,8 @@
 		quality: 'high',
 		grindMode: 'pre-ground',
 		grindSize: 'medium',
-		grindOverride: false
+		grindOverride: false,
+		ratioOffset: 0
 	};
 
 	let appState = $state(initialState);
@@ -103,6 +104,7 @@
 		appState.grindMode = initialState.grindMode;
 		appState.grindSize = initialState.grindSize;
 		appState.grindOverride = false;
+		appState.ratioOffset = 0;
 	};
 
 	const handleModeChange = (mode: State['mode']) => {
@@ -127,6 +129,7 @@
 
 	const handleRoastChange = (roast: State['roast']) => {
 		appState.roast = roast;
+		appState.ratioOffset = 0;
 		if (appState.grindMode === 'pre-ground' || isGrindLocked) {
 			syncRecommendedGrind();
 		}
@@ -134,6 +137,7 @@
 
 	const handleQualityChange = (quality: State['quality']) => {
 		appState.quality = quality;
+		appState.ratioOffset = 0;
 		if (appState.grindMode === 'pre-ground' || isGrindLocked) {
 			syncRecommendedGrind();
 		}
@@ -141,6 +145,7 @@
 
 	const handleBrewMethodChange = (method: State['brewMethod']) => {
 		appState.brewMethod = method;
+		appState.ratioOffset = 0;
 		if (method === 'aeropress' && appState.mode === 'water') {
 			appState.aeropressMode = 'immersion';
 		}
@@ -152,6 +157,7 @@
 
 	const handleAeropressModeChange = (mode: State['aeropressMode']) => {
 		appState.aeropressMode = mode;
+		appState.ratioOffset = 0;
 		if (appState.grindMode === 'pre-ground' || isGrindLocked) {
 			syncRecommendedGrind();
 		}
@@ -159,6 +165,7 @@
 
 	const handleGrindModeChange = (grindMode: State['grindMode']) => {
 		appState.grindMode = isGrindLocked ? 'pre-ground' : grindMode;
+		appState.ratioOffset = 0;
 		if (appState.grindMode === 'pre-ground') {
 			syncRecommendedGrind();
 		} else {
@@ -170,6 +177,7 @@
 		appState.grindSize = grind;
 		appState.grindMode = 'custom';
 		appState.grindOverride = grind !== recommendedGrind;
+		appState.ratioOffset = 0;
 	};
 
 	onMount(() => {
@@ -196,6 +204,7 @@
 				if (parsed.grindSize) appState.grindSize = parsed.grindSize;
 				if (typeof parsed.grindOverride === 'boolean')
 					appState.grindOverride = parsed.grindOverride;
+				if (typeof parsed.ratioOffset === 'number') appState.ratioOffset = parsed.ratioOffset;
 				if (appState.brewMethod === 'preground-espresso') {
 					appState.grindMode = 'pre-ground';
 				}
@@ -299,6 +308,9 @@
 			{ratio}
 			{baseRatio}
 			{recommendedGrind}
+			isEspresso={_isEspressoMode}
+			ratioOffset={appState.ratioOffset}
+			onRatioOffsetChange={(offset) => (appState.ratioOffset = offset)}
 		/>
 
 		<PageFooter />

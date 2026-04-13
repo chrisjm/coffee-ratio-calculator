@@ -35,6 +35,7 @@ export interface State {
 	grindMode: GrindMode;
 	grindSize: GrindSize;
 	grindOverride: boolean;
+	ratioOffset: number;
 }
 
 export interface BrewConfig {
