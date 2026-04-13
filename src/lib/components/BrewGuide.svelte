@@ -83,7 +83,7 @@
 			<div class="flex items-center gap-1.5">
 				<button
 					type="button"
-					class="touch-manipulation flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-stone-200 bg-white text-stone-600 transition-colors hover:border-stone-300 hover:text-stone-900 active:bg-stone-100"
+					class="flex h-7 w-7 shrink-0 touch-manipulation items-center justify-center rounded-full border border-stone-200 bg-white text-stone-600 transition-colors hover:border-stone-300 hover:text-stone-900 active:bg-stone-100"
 					onclick={() => onRatioOffsetChange(ratioOffset - ratioStep)}
 					aria-label="Decrease ratio"
 				>
@@ -94,7 +94,7 @@
 				</span>
 				<button
 					type="button"
-					class="touch-manipulation flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-stone-200 bg-white text-stone-600 transition-colors hover:border-stone-300 hover:text-stone-900 active:bg-stone-100"
+					class="flex h-7 w-7 shrink-0 touch-manipulation items-center justify-center rounded-full border border-stone-200 bg-white text-stone-600 transition-colors hover:border-stone-300 hover:text-stone-900 active:bg-stone-100"
 					onclick={() => onRatioOffsetChange(ratioOffset + ratioStep)}
 					aria-label="Increase ratio"
 				>
@@ -103,7 +103,7 @@
 				{#if hasManualOffset}
 					<button
 						type="button"
-						class="touch-manipulation flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-stone-400 transition-colors hover:text-stone-600"
+						class="flex h-6 w-6 shrink-0 touch-manipulation items-center justify-center rounded-full text-stone-400 transition-colors hover:text-stone-600"
 						onclick={() => onRatioOffsetChange(0)}
 						aria-label="Reset ratio to recommended"
 					>
